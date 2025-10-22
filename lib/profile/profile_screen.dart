@@ -4,6 +4,7 @@ import 'package:rezume_app/profile/help_center_screen.dart';
 import 'package:rezume_app/profile/edit_profile_screen.dart';
 import 'package:rezume_app/profile/saved_resumes_screen.dart';
 import 'package:rezume_app/profile/org_edit_profile_screen.dart';
+import 'package:rezume_app/profile/company_list_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String role; // 'User' or 'Organization'
@@ -28,6 +29,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _profileContact = '';
   String _profileAvatarText = '';
   String _profileEmail = '';
+
+  // Update the _menuItems list to include the new company list option
+  final List<Map<String, dynamic>> _menuItems = [
+    {
+      'title': 'My Saved Resumes',
+      'icon': Icons.description_outlined,
+      'route': const SavedResumesScreen(),
+    },
+    {
+      'title': 'Apply to Companies', // New menu item
+      'icon': Icons.business_center_outlined,
+      'route': const CompanyListScreen(),
+    },
+    {
+      'title': 'Help Center',
+      'icon': Icons.help_outline_rounded,
+      'route': const HelpCenterScreen(),
+    },
+  ];
 
   @override
   void initState() {
@@ -154,7 +174,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onTap: () { /* Navigate to subscription details */ },
                     color: _currentPrimaryColor,
                   ),
-
+                _buildProfileOption(
+                  icon: Icons.business_center_outlined,
+                  title: 'Apply to Companies',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CompanyListScreen(),
+                      ),
+                    );
+                  },
+                  color: _currentPrimaryColor,
+                ),
                 _buildProfileOption(
                   icon: Icons.help_outline_rounded,
                   title: 'Help Center',

@@ -22,31 +22,37 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
       'icon': Icons.trending_up_rounded,
       'title': 'Use Industry Action Verbs',
       'subtitle': "Replace 'responsible for vehicle upkeep' with stronger verbs like 'Maintained vehicle fleet' or 'Performed daily vehicle inspections'.",
+      'severity': 'suggestion',
     },
     {
       'icon': Icons.calculate_rounded,
       'title': 'Quantify Driving Experience',
       'subtitle': "Instead of just 'Managed routes', specify the scale: e.g., 'Managed 10+ daily delivery routes covering 150km' or 'Operated commercial vehicles (specify type)'.",
+      'severity': 'suggestion',
     },
     {
       'icon': Icons.local_shipping_rounded, // Relevant icon
       'title': 'Highlight Logistics Skills',
       'subtitle': "Add keywords relevant to driving/logistics like 'Route Optimization', 'Load Securement', 'DOT Regulations', or 'Defensive Driving Techniques'.",
+      'severity': 'tip',
     },
     {
-      'icon': Icons.card_membership_rounded, // Relevant icon
+      'icon': Icons.card_membership_rounded,
       'title': 'Mention Licenses/Certifications',
       'subtitle': "Do you have a Commercial Driver's License (CDL) or specific endorsements? Add a 'Licenses' section to clearly state them.",
+      'severity': 'suggestion',
     },
     {
       'icon': Icons.build_circle_rounded, // Relevant icon
       'title': 'Detail Maintenance Skills',
       'subtitle': "Expand on 'vehicle upkeep'. Mention specific tasks like 'Minor repairs', 'Fluid checks', 'Tire pressure monitoring'.",
+      'severity': 'tip',
     },
     {
       'icon': Icons.spellcheck_rounded,
       'title': 'Check Technical Terms',
       'subtitle': "Ensure specific vehicle parts, tool names, or safety procedures mentioned are spelled correctly.",
+      'severity': 'critical',
     }
   ];
 
@@ -65,6 +71,20 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
       return Colors.orange.shade600; // Average score
     } else {
       return Colors.green.shade600; // Good score
+    }
+  }
+
+  // New helper: map severity to color
+  Color _getSeverityColor(String severity) {
+    switch (severity.toLowerCase()) {
+      case 'critical':
+        return Colors.red;
+      case 'suggestion':
+        return Colors.blue;
+      case 'tip':
+        return Colors.green;
+      default:
+        return Colors.grey;
     }
   }
 
@@ -171,6 +191,7 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
                     icon: suggestion['icon'],
                     title: suggestion['title'],
                     subtitle: suggestion['subtitle'],
+                    severity: suggestion['severity'] ?? 'suggestion',
                   );
                 },
               ),
@@ -216,6 +237,7 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
     required IconData icon,
     required String title,
     required String subtitle,
+    required String severity,
   }) {
     return Card(
       elevation: 1.5,
@@ -225,7 +247,7 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
       child: ListTile(
         contentPadding:
             const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        leading: Icon(icon, color: const Color(0xFF007BFF), size: 28),
+        leading: Icon(icon, color: _getSeverityColor(severity), size: 28),
         title: Text(
           title,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),

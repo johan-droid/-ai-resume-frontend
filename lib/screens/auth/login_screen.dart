@@ -24,9 +24,12 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  final Color _userPrimaryColor = const Color(0xFF3B82F6);
-  final Color _userSecondaryColor = const Color(0xFF60A5FA);
-  final Color _orgPrimaryColor = const Color(0xFF0EA5E9);
+  // Update these color values for User role
+  final Color _userPrimaryColor = const Color(0xFF1E40AF);    // Darker blue
+  final Color _userSecondaryColor = const Color(0xFF2563EB);  // Rich blue
+  
+  // Keep organization colors as is
+  final Color _orgPrimaryColor = const Color(0xFF0EA5E9);     
   final Color _orgSecondaryColor = const Color(0xFF38BDF8);
 
   Color get _currentPrimaryColor =>
@@ -147,16 +150,17 @@ class _LoginScreenState extends State<LoginScreen>
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isSelected
-                      ? Colors.white.withOpacity(0.3)
+                      ? Colors.white
                       : Colors.white.withOpacity(0.2),
-                  width: 2,
+                  width: isSelected ? 3 : 2,
                 ),
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                          color: _currentPrimaryColor.withOpacity(0.4),
-                          blurRadius: 12,
+                          color: _currentPrimaryColor.withOpacity(0.6),
+                          blurRadius: 15,
                           offset: const Offset(0, 4),
+                          spreadRadius: 2,
                         ),
                       ]
                     : [],
@@ -164,19 +168,45 @@ class _LoginScreenState extends State<LoginScreen>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 32,
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Icon(
+                        icon,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                      if (isSelected)
+                        Positioned(
+                          right: -5,
+                          top: -5,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: _currentPrimaryColor,
+                                width: 2,
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.check,
+                              size: 12,
+                              color: _currentPrimaryColor,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 8),
                   Text(
                     label,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 14,
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.w500,
+                      fontSize: isSelected ? 16 : 14,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                      letterSpacing: isSelected ? 0.5 : 0,
                     ),
                   ),
                 ],

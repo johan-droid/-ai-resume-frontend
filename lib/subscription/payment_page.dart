@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_flutter/qr_flutter.dart'; // Add this import at the top
 import 'subscription_page.dart'; // To get the SubscriptionPlan model
 import 'otp_verification_page.dart'; // To navigate to the next step
 
@@ -114,11 +115,36 @@ class _PaymentPageState extends State<PaymentPage> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          // Dummy QR Code
-          Icon(
-            Icons.qr_code_2_rounded,
-            size: 250,
-            color: Theme.of(context).colorScheme.onSurface,
+          // Realistic QR Code
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: QrImageView(
+              data: 'upi://pay?pa=your-merchant-id@upi&pn=Your-Business-Name&am=${widget.plan.price.replaceAll('₹', '')}&cu=INR',
+              version: QrVersions.auto,
+              size: 250.0,
+              backgroundColor: Colors.white,
+              padding: const EdgeInsets.all(8),
+              errorStateBuilder: (context, error) {
+                return const Center(
+                  child: Text(
+                    'Something went wrong...',
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              },
+            ),
           ),
           const SizedBox(height: 24),
           const Text(

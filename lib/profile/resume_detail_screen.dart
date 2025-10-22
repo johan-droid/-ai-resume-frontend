@@ -1,138 +1,164 @@
 // lib/profile/resume_detail_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package:rezume_app/models/dummy_candidates.dart';
 
 class ResumeDetailScreen extends StatelessWidget {
-  final Candidate candidate;
+  final dynamic resumeData; // accept Map or Candidate object
 
-  const ResumeDetailScreen({super.key, required this.candidate});
+  const ResumeDetailScreen({
+    super.key,
+    required this.resumeData,
+  });
 
-  // --- Dummy "Send Email" function ---
-  void _sendEmail(BuildContext context, String status) {
-    // In a real app, this would trigger a backend call to send an email.
-    print('Sending ${status.toLowerCase()} email to ${candidate.email}');
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Candidate has been ${status.toLowerCase()}!'),
-        backgroundColor: status == 'Accepted' ? Colors.green : Colors.red,
-      ),
-    );
-    
-    // Go back to the list after action
-    Navigator.of(context).pop();
+  Map<String, dynamic> _toMap(dynamic src) {
+    if (src is Map<String, dynamic>) return src;
+    // fall back to dynamic-field access for Candidate object
+    final dynamic s = src;
+    return {
+      'title': s['title'] ?? s.title ?? s.jobProfile ?? '',
+      'subtitle': s['subtitle'] ?? '',
+      'fullName': s['fullName'] ?? s.name ?? '',
+      'jobTitle': s['jobTitle'] ?? s.jobProfile ?? '',
+      'contact': s['contact'] ??
+          {
+            'phone': s.phone ?? '',
+            'email': s.email ?? '',
+            'location': s.location ?? ''
+          },
+      'experience': s['experience'] ?? [],
+      'skills': s['skills'] ?? [],
+      'licenses': s['licenses'] ?? [],
+      'languages': s['languages'] ?? [],
+    };
   }
 
   @override
   Widget build(BuildContext context) {
-    // --- ADD THIS LINE ---
-    final Color _primaryColor = Colors.indigo.shade600;
-    // --- END OF ADDITION ---
+    final data = _toMap(resumeData);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(candidate.name),
-        backgroundColor: _primaryColor,
+        title: Text(data['title']?.toString() ?? 'Resume'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+        titleTextStyle: const TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // --- Header ---
-            Center(
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: _primaryColor.withOpacity(0.1),
-                    child: Text(candidate.name.substring(0, 1), style: TextStyle(fontSize: 32, color: _primaryColor)),
-                  ),
-                  SizedBox(height: 12),
-                  Text(candidate.name, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  Text(candidate.jobProfile, style: TextStyle(fontSize: 18, color: Colors.grey[600])),
-                  Text('${candidate.location} | ${candidate.email}'),
-                ],
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          // Header
+          Text(
+            data['fullName']?.toString() ?? '',
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          if ((data['jobTitle'] ?? '').toString().isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0, bottom: 12.0),
+              child: Text(
+                data['jobTitle']?.toString() ?? '',
+                style: const TextStyle(fontSize: 16, color: Colors.black54),
               ),
             ),
-            SizedBox(height: 24),
-            
-            // --- Sections ---
-            _buildSectionTitle('Qualification', _primaryColor),
-            _buildSectionContent(candidate.qualification),
-            
-            _buildSectionTitle('Experience', _primaryColor),
-            _buildSectionContent('${candidate.experience} years'),
-            
-            _buildSectionTitle('Skills', _primaryColor),
-            _buildSectionContent(candidate.skills.join(', ')), // Display skills as a comma-separated string
-            
-            _buildSectionTitle('Achievements', _primaryColor),
-            ...candidate.achievements.map((ach) => _buildListItem(ach)).toList(), // Display achievements as a bulleted list
-            
-            SizedBox(height: 40),
 
-            // --- Action Buttons ---
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.check_circle_outline),
-                    label: Text('ACCEPT'),
-                    onPressed: () => _sendEmail(context, 'Accepted'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade600,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
+          // Contact card (safe access)
+          if (data['contact'] is Map)
+            Card(
+              color: Colors.blue[50],
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    if ((data['contact']['phone'] ?? '').toString().isNotEmpty)
+                      Row(children: [
+                        const Icon(Icons.phone, size: 18, color: Color(0xFF0056b3)),
+                        const SizedBox(width: 8),
+                        Text(data['contact']['phone'].toString()),
+                      ]),
+                    if ((data['contact']['email'] ?? '').toString().isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6.0),
+                        child: Row(children: [
+                          const Icon(Icons.email, size: 18, color: Color(0xFF0056b3)),
+                          const SizedBox(width: 8),
+                          Text(data['contact']['email'].toString()),
+                        ]),
+                      ),
+                    if ((data['contact']['location'] ?? '').toString().isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6.0),
+                        child: Row(children: [
+                          const Icon(Icons.location_on, size: 18, color: Color(0xFF0056b3)),
+                          const SizedBox(width: 8),
+                          Text(data['contact']['location'].toString()),
+                        ]),
+                      ),
+                  ],
                 ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    icon: Icon(Icons.cancel_outlined),
-                    label: Text('REJECT'),
-                    onPressed: () => _sendEmail(context, 'Rejected'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red.shade600,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
+              ),
+            ),
+
+          const SizedBox(height: 12),
+
+          // Experience
+          if ((data['experience'] as List).isNotEmpty) ...[
+            const Text('Experience', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            ...((data['experience'] as List).map((exp) {
+              final Map<String, dynamic> e = exp is Map<String, dynamic> ? exp : {};
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 6.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    if ((e['company'] ?? '').toString().isNotEmpty)
+                      Text(e['company'].toString(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    if ((e['position'] ?? '').toString().isNotEmpty)
+                      Text('${e['position'] ?? ''} ${e['duration'] != null ? '(${e['duration']})' : ''}', style: const TextStyle(color: Colors.black54)),
+                    if ((e['details'] ?? []).isNotEmpty)
+                      const SizedBox(height: 8),
+                    if ((e['details'] ?? []).isNotEmpty)
+                      ...((e['details'] as List).map((d) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                              const Text('• ', style: TextStyle(fontSize: 16)),
+                              Expanded(child: Text(d.toString())),
+                            ]),
+                          ))),
+                  ]),
                 ),
-              ],
-            )
+              );
+            })).toList(),
           ],
-        ),
-      ),
-    );
-  }
 
-  // --- Helper Widgets for Resume Sections ---
-  Widget _buildSectionTitle(String title, Color color) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Text(title.toUpperCase(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color)),
-    );
-  }
-  
-  Widget _buildSectionContent(String content) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
-      child: Text(content, style: TextStyle(fontSize: 16)),
-    );
-  }
-  
-  Widget _buildListItem(String content) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('• ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Expanded(child: Text(content, style: TextStyle(fontSize: 16))),
-        ],
+          // Skills
+          if ((data['skills'] as List).isNotEmpty) ...[
+            const SizedBox(height: 12),
+            const Text('Skills', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Wrap(spacing: 8.0, runSpacing: 8.0, children: (data['skills'] as List).map((s) => Chip(label: Text(s.toString()), backgroundColor: Colors.blue[50], labelStyle: const TextStyle(color: Color(0xFF0056b3)))).toList()),
+          ],
+
+          // Licenses
+          if ((data['licenses'] as List).isNotEmpty) ...[
+            const SizedBox(height: 12),
+            const Text('Licenses & Certifications', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: (data['licenses'] as List).map((l) => Padding(padding: const EdgeInsets.symmetric(vertical: 4.0), child: Text('• ${l.toString()}'))).toList())
+          ],
+
+          // Languages
+          if ((data['languages'] as List).isNotEmpty) ...[
+            const SizedBox(height: 12),
+            const Text('Languages', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Wrap(spacing: 8.0, children: (data['languages'] as List).map((l) => Chip(label: Text(l.toString()), backgroundColor: Colors.blue[50], labelStyle: const TextStyle(color: Color(0xFF0056b3)))).toList()),
+          ],
+        ]),
       ),
     );
   }

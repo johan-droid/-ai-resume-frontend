@@ -110,7 +110,11 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ResumeDetailScreen(candidate: candidate)),
+            MaterialPageRoute(
+              builder: (context) => ResumeDetailScreen(
+                resumeData: candidate, // Changed from candidate: candidate
+              ),
+            ),
           );
         },
         child: Padding(

@@ -12,6 +12,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Add language selection and video state
+  String? _selectedLanguage;
+  final List<Map<String, dynamic>> _languageOptions = [
+    {
+      'code': 'en',
+      'name': 'English',
+      'videoAsset': 'assets/videos/tutorial_en.mp4',
+    },
+    {
+      'code': 'hi',
+      'name': 'हिंदी (Hindi)',
+      'videoAsset': 'assets/videos/tutorial_hi.mp4',
+    },
+    {
+      'code': 'or',
+      'name': 'ଓଡ଼ିଆ (Odia)',
+      'videoAsset': 'assets/videos/tutorial_or.mp4',
+    },
+  ];
+
   // --- Define Color Themes ---
   final Color _userPrimaryColor = Color(0xFF007BFF); // Blue (no change)
 
@@ -51,85 +71,146 @@ class _HomeScreenState extends State<HomeScreen> {
                 widget.role == 'User' 
                     ? (loc?.translate('howToGetStarted') ?? 'How to Get Started') 
                     : 'Find Top Talent',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-              // --- Video Player Placeholder ---
-              Container(
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.play_circle_fill_rounded,
-                    color: Colors.white.withOpacity(0.8),
-                    size: 60,
+              // Language Selection Section
+              if (_selectedLanguage == null) ...[
+                const Text(
+                  'Select Your Language',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                child: Text(
-                  widget.role == 'User'
-                      ? (loc?.translate('showingTutorialIn') ?? 'Showing tutorial in: English')
-                      : 'How to use Rezoom to find candidates',
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-              ),
-              SizedBox(height: 24),
-
-              // --- Conditional Features/Suggestions Section ---
-              if (widget.role == 'User') ...[
-                // --- User Features ---
-                _buildFeatureCard(
-                  icon: Icons.article_rounded,
-                  title: loc?.translate('step1Title') ?? 'Step 1: Choose a Template',
-                  subtitle: loc?.translate('step1Subtitle') ?? 'Pick a professional template that fits your style.',
-                  onTap: () { /* Navigate to Templates */ },
-                ),
-                _buildFeatureCard(
-                  icon: Icons.auto_awesome_rounded,
-                  title: loc?.translate('step2Title') ?? 'Step 2: Fill in Details with AI',
-                  subtitle: loc?.translate('step2Subtitle') ?? 'Use our AI assistant to help you write details.',
-                  onTap: () { /* Navigate to chat flow */ },
-                ),
-                _buildFeatureCard(
-                  icon: Icons.download_for_offline_rounded,
-                  title: loc?.translate('step3Title') ?? 'Step 3: Download your Resume',
-                  subtitle: loc?.translate('step3Subtitle') ?? 'Download your completed resume as a PDF.',
-                  onTap: () { /* Show download options */ },
-                ),
-              ] else ...[
-                // --- Organization Features ---
-                _buildFeatureCard(
-                  icon: Icons.search_rounded,
-                  title: 'Search Candidate Profiles',
-                  subtitle: 'Filter candidates by skills, experience, and location.',
-                  onTap: () {
-                    // Navigate to Job tab (index 2 for Organization mode)
-                    widget.onNavigateToTab?.call(2);
+                const SizedBox(height: 16),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1.5,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemCount: _languageOptions.length,
+                  itemBuilder: (context, index) {
+                    final lang = _languageOptions[index];
+                    return _buildLanguageCard(
+                      name: lang['name'],
+                      code: lang['code'],
+                      onTap: () => setState(() => _selectedLanguage = lang['code']),
+                    );
                   },
                 ),
-                _buildFeatureCard(
-                  icon: Icons.playlist_add_check_rounded,
-                  title: 'Review AI-Matched Candidates',
-                  subtitle: 'See candidates automatically matched to your job postings.',
-                  onTap: () { /* Navigate to matched candidates */ },
+              ] else ...[
+                // Video Player Section with Language Indicator
+                Stack(
+                  children: [
+                    Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.play_circle_fill_rounded,
+                          color: Colors.white.withOpacity(0.8),
+                          size: 60,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              _getLanguageName(_selectedLanguage!),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            InkWell(
+                              onTap: () => setState(() => _selectedLanguage = null),
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                _buildFeatureCard(
-                  icon: Icons.post_add_rounded,
-                  title: 'Post a Job Opening',
-                  subtitle: 'Create job listings to attract blue-collar workers.',
-                  onTap: () { /* Navigate to job posting form */ },
-                ),
+                const SizedBox(height: 24),
+
+                // --- Conditional Features/Suggestions Section ---
+                if (widget.role == 'User') ...[
+                  // --- User Features ---
+                  _buildFeatureCard(
+                    icon: Icons.article_rounded,
+                    title: loc?.translate('step1Title') ?? 'Step 1: Choose a Template',
+                    subtitle: loc?.translate('step1Subtitle') ?? 'Pick a professional template that fits your style.',
+                    onTap: () { /* Navigate to Templates */ },
+                  ),
+                  _buildFeatureCard(
+                    icon: Icons.auto_awesome_rounded,
+                    title: loc?.translate('step2Title') ?? 'Step 2: Fill in Details with AI',
+                    subtitle: loc?.translate('step2Subtitle') ?? 'Use our AI assistant to help you write details.',
+                    onTap: () { /* Navigate to chat flow */ },
+                  ),
+                  _buildFeatureCard(
+                    icon: Icons.download_for_offline_rounded,
+                    title: loc?.translate('step3Title') ?? 'Step 3: Download your Resume',
+                    subtitle: loc?.translate('step3Subtitle') ?? 'Download your completed resume as a PDF.',
+                    onTap: () { /* Show download options */ },
+                  ),
+                ] else ...[
+                  // --- Organization Features ---
+                  _buildFeatureCard(
+                    icon: Icons.search_rounded,
+                    title: 'Search Candidate Profiles',
+                    subtitle: 'Filter candidates by skills, experience, and location.',
+                    onTap: () {
+                      // Navigate to Job tab (index 2 for Organization mode)
+                      widget.onNavigateToTab?.call(2);
+                    },
+                  ),
+                  _buildFeatureCard(
+                    icon: Icons.playlist_add_check_rounded,
+                    title: 'Review AI-Matched Candidates',
+                    subtitle: 'See candidates automatically matched to your job postings.',
+                    onTap: () { /* Navigate to matched candidates */ },
+                  ),
+                  _buildFeatureCard(
+                    icon: Icons.post_add_rounded,
+                    title: 'Post a Job Opening',
+                    subtitle: 'Create job listings to attract blue-collar workers.',
+                    onTap: () { /* Navigate to job posting form */ },
+                  ),
+                ],
               ],
             ],
           ),
@@ -173,5 +254,51 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  // Helper method for language selection cards
+  Widget _buildLanguageCard({
+    required String name,
+    required String code,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: _currentPrimaryColor.withOpacity(0.2),
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: _currentPrimaryColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Helper method to get language name from code
+  String _getLanguageName(String code) {
+    return _languageOptions
+        .firstWhere((lang) => lang['code'] == code)['name'];
   }
 }

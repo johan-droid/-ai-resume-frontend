@@ -27,6 +27,12 @@ dependencies:
   printing: ^5.12.0
   pinput: ^5.0.2
 
+  # QR Code generation
+  qr_flutter: ^4.1.0
+
+  # Video player
+  video_player: ^2.7.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -39,6 +45,7 @@ flutter:
   # Make sure the FOLDER is listed here
   assets:
     - assets/images/rezoom_logo.png
+    - assets/videos/
     - assets/images/
     - assets/lang/
     - assets/fonts/ # <-- This line MUST exist and be indented correctly
@@ -55,3 +62,12 @@ flutter:
   #   - family: NotoSansOriya
   #     fonts:
   #       - asset: assets/fonts/NotoSansOriya-Regular.ttf
+
+  # 3. Video files section
+  # Uncomment and add video files when available:
+  # videos:
+  #   - family: Tutorial
+  #     files:
+  #       - asset: assets/videos/tutorial_en.mp4
+  #       - asset: assets/videos/tutorial_hi.mp4
+  #       - asset: assets/videos/tutorial_or.mp4
