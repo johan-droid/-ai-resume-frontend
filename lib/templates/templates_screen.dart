@@ -1,6 +1,10 @@
+// lib/templates/templates_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:rezume_app/models/resume_template_model.dart';
 import 'package:rezume_app/templates/resume_builder_screen.dart';
+// --- ADD THIS IMPORT ---
+import 'package:rezume_app/templates/voice_resume_builder_screen.dart';
 
 class TemplatesScreen extends StatefulWidget {
   const TemplatesScreen({super.key});
@@ -94,6 +98,22 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         },
       ),
       // --- END OF MODIFICATION ---
+
+      // --- *** ADD THIS FLOATING ACTION BUTTON *** ---
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const VoiceResumeBuilderScreen(),
+            ),
+          );
+        },
+        label: const Text('Build with Voice'),
+        icon: const Icon(Icons.mic),
+        backgroundColor: const Color(0xFF007BFF),
+      ),
+      // --- *** END OF ADDITION *** ---
     );
   }
 
