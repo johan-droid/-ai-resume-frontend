@@ -94,9 +94,9 @@ class _MainScreenState extends State<MainScreen> {
   // --- JOB SEEKER UI (Templates & ATS Score, NO Job tab) ---
   List<Widget> get _userPages => [
     HomeScreen(role: 'User', onNavigateToTab: _navigateToTab),
-    TemplatesScreen(),
-    UploadResumeScreen(),
-    ProfileScreen(role: 'User'),
+    const TemplatesScreen(),
+    const UploadResumeScreen(),
+    const ProfileScreen(role: 'User'),
   ];
 
   final List<BottomNavigationBarItem> _userNavItems = [
@@ -125,9 +125,9 @@ class _MainScreenState extends State<MainScreen> {
   // --- ORGANIZATION UI (Subscription) ---
   List<Widget> get _organizationPages => [
     HomeScreen(role: 'Organization', onNavigateToTab: _navigateToTab),
-    SubscriptionPage(),
-    CandidateListScreen(),
-    ProfileScreen(role: 'Organization'),
+    const SubscriptionPage(),
+    const CandidateListScreen(),
+    const ProfileScreen(role: 'Organization'),
   ];
 
   final List<BottomNavigationBarItem> _organizationNavItems = [
@@ -160,27 +160,9 @@ class _MainScreenState extends State<MainScreen> {
     final List<BottomNavigationBarItem> currentNavItems = isOrg ? _organizationNavItems : _userNavItems;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildModeButton(
-              title: 'User',
-              isSelected: !_isOrganizationMode,
-              onTap: () => setState(() => _isOrganizationMode = false),
-            ),
-            const SizedBox(width: 16),
-            _buildModeButton(
-              title: 'Organization',
-              isSelected: _isOrganizationMode,
-              onTap: () => setState(() => _isOrganizationMode = true),
-            ),
-          ],
-        ),
-        centerTitle: true,
-      ),
+      // --- MODIFICATION ---
+      // The `appBar` property has been completely removed from here.
+      // --- END OF MODIFICATION ---
       body: currentPages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -193,54 +175,6 @@ class _MainScreenState extends State<MainScreen> {
         },
         selectedItemColor: Colors.indigo,
         unselectedItemColor: Colors.grey,
-      ),
-    );
-  }
-
-  Widget _buildModeButton({
-    required String title,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.indigo : Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(25),
-          border: Border.all(
-            color: isSelected ? Colors.indigo : Colors.grey.shade300,
-            width: 2,
-          ),
-          boxShadow: isSelected ? [
-            BoxShadow(
-              color: Colors.indigo.withOpacity(0.3),
-              spreadRadius: 1,
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            )
-          ] : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isSelected ? Icons.check_circle : Icons.circle_outlined,
-              size: 18,
-              color: isSelected ? Colors.white : Colors.grey,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.grey.shade700,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

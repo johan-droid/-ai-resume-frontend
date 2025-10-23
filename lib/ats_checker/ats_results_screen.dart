@@ -1,3 +1,5 @@
+// lib/ats_checker/ats_results_screen.dart
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:rezume_app/ats_checker/resume_editor_screen.dart';
@@ -10,71 +12,79 @@ class AtsResultsScreen extends StatefulWidget {
 }
 
 class _AtsResultsScreenState extends State<AtsResultsScreen> {
-  // --- 1. State Variables ---
-  // These will hold our random data
   int _atsScore = 0;
   String _scoreMessage = '';
   List<Map<String, dynamic>> _suggestions = [];
 
-  // --- REPLACE THE OLD LIST WITH THIS NEW ONE ---
+  // --- NEW: Suggestions based on modern-driver-resume.pdf ---
   final List<Map<String, dynamic>> _allSuggestions = [
     {
-      'icon': Icons.trending_up_rounded,
-      'title': 'Use Industry Action Verbs',
-      'subtitle': "Replace 'responsible for vehicle upkeep' with stronger verbs like 'Maintained vehicle fleet' or 'Performed daily vehicle inspections'.",
+      'icon': Icons.star_border_rounded,
+      'title': "Highlight 'Driver of the Year 2023' Award",
+      'subtitle':
+          // --- FIX: Brackets moved inside the string ---
+          "Your 'Driver of the Year 2023' award is a major achievement. Move it to a separate 'Awards' section or bold it for high visibility.",
       'severity': 'suggestion',
     },
     {
-      'icon': Icons.calculate_rounded,
-      'title': 'Quantify Driving Experience',
-      'subtitle': "Instead of just 'Managed routes', specify the scale: e.g., 'Managed 10+ daily delivery routes covering 150km' or 'Operated commercial vehicles (specify type)'.",
+      'icon': Icons.directions_car_rounded,
+      'title': 'Specify Vehicle Types',
+      'subtitle':
+          // --- FIX: Brackets moved inside the string ---
+          "You mention 'LMV & HMV' and 'Multi-vehicle Operation'. Specify the exact types, e.g., 'Tata Ace, 10-wheel trucks, luxury sedans' to be more concrete.",
       'severity': 'suggestion',
     },
     {
-      'icon': Icons.local_shipping_rounded, // Relevant icon
-      'title': 'Highlight Logistics Skills',
-      'subtitle': "Add keywords relevant to driving/logistics like 'Route Optimization', 'Load Securement', 'DOT Regulations', or 'Defensive Driving Techniques'.",
+      'icon': Icons.description_outlined,
+      'title': 'Combine License Information',
+      'subtitle':
+          // --- FIX: Brackets moved inside the string ---
+          "You list 'Valid LMV & HMV' in the header and in 'Certifications'. Remove it from the header and keep it in the 'Certifications' section to avoid redundancy.",
       'severity': 'tip',
     },
     {
-      'icon': Icons.card_membership_rounded,
-      'title': 'Mention Licenses/Certifications',
-      'subtitle': "Do you have a Commercial Driver's License (CDL) or specific endorsements? Add a 'Licenses' section to clearly state them.",
+      'icon': Icons.auto_awesome_rounded,
+      'title': "Quantify 'Fuel Efficiency' Skill",
+      'subtitle':
+          // --- FIX: All brackets moved inside a single string ---
+          "You list 'Fuel Efficiency Optimization' as a skill and show an 18% cost reduction. Link these, e.g., 'Optimized fuel efficiency, saving 85,000 annually'.",
       'severity': 'suggestion',
     },
     {
-      'icon': Icons.build_circle_rounded, // Relevant icon
-      'title': 'Detail Maintenance Skills',
-      'subtitle': "Expand on 'vehicle upkeep'. Mention specific tasks like 'Minor repairs', 'Fluid checks', 'Tire pressure monitoring'.",
+      'icon': Icons.thumb_up_alt_outlined,
+      'title': 'Consolidate Customer Service Scores',
+      'subtitle':
+          // --- FIX: All brackets moved inside a single string ---
+          "You have 'Customer Service Excellence', a 4.9/5 rating, and 95% positive feedback. Combine these into one powerful point under 'Senior Company Driver'.",
       'severity': 'tip',
     },
     {
-      'icon': Icons.spellcheck_rounded,
-      'title': 'Check Technical Terms',
-      'subtitle': "Ensure specific vehicle parts, tool names, or safety procedures mentioned are spelled correctly.",
+      'icon': Icons.text_snippet_outlined,
+      'title': 'Strengthen Professional Summary',
+      'subtitle':
+          // --- FIX: Brackets moved inside the string ---
+          "Your summary starts with 'Reliable and safety-focused'. Make it more impactful by starting with your award: 'Award-winning driver with 8+ years...'",
       'severity': 'critical',
     }
   ];
+  // --- END: Fixed Suggestions ---
 
   @override
   void initState() {
     super.initState();
-    // This runs the function as soon as the page opens
     _generateFakeAtsData();
   }
 
-  // --- ADD THIS HELPER FUNCTION ---
   Color _getScoreColor(int score) {
     if (score < 50) {
-      return Colors.red.shade600; // Poor score
+      return Colors.red.shade600;
     } else if (score < 75) {
-      return Colors.orange.shade600; // Average score
+      return Colors.orange.shade600;
     } else {
-      return Colors.green.shade600; // Good score
+      return Colors.green.shade600;
     }
   }
 
-  // New helper: map severity to color
   Color _getSeverityColor(String severity) {
     switch (severity.toLowerCase()) {
       case 'critical':
@@ -88,28 +98,24 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
     }
   }
 
-  // --- 3. The "AI" Simulation Function ---
   void _generateFakeAtsData() {
-    // Generate a random score between 60 and 95
     final random = Random();
-    final score = 60 + random.nextInt(36); // 36 = 95 - 60 + 1
+    // Generate a score between 65 and 80, as the resume is good but has points to improve
+    final score = 65 + random.nextInt(16); // 65 to 80
 
-    // Pick 3 random, unique suggestions
+    // Pick 3 random, unique suggestions from our new list
     final shuffledList = List.of(_allSuggestions)..shuffle(random);
     final selectedSuggestions = shuffledList.take(3).toList();
 
-    // Set the message based on the score
     String message;
-    if (score > 85) {
-      message = "This is an excellent score! Just a few minor tweaks.";
-    } else if (score > 70) {
+    if (score > 75) {
+      message =
+          "This is a strong resume! Let's fix these key areas to make it perfect.";
+    } else {
       message =
           "This is a good score! Here are some suggestions to make it even better.";
-    } else {
-      message = "There's room for improvement. Let's fix these key areas.";
     }
 
-    // Update the state to rebuild the UI
     setState(() {
       _atsScore = score;
       _scoreMessage = message;
@@ -132,11 +138,10 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // --- 1. The Score Card ---
               Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
-                color: Colors.blue[50], // Light blue background
+                color: Colors.blue[50],
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Center(
@@ -145,19 +150,15 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
                         Text('YOUR SCORE',
                             style: TextStyle(color: Colors.blue[800])),
                         const SizedBox(height: 8),
-                        // --- DYNAMIC SCORE ---
                         Text(
                           '$_atsScore%',
                           style: TextStyle(
                             fontSize: 72,
                             fontWeight: FontWeight.bold,
-                            // --- THIS IS THE CHANGE ---
-                            color: _getScoreColor(_atsScore), // Use the dynamic color
-                            // --- END OF CHANGE ---
+                            color: _getScoreColor(_atsScore),
                           ),
                         ),
                         const SizedBox(height: 8),
-                        // --- DYNAMIC MESSAGE ---
                         Text(
                           _scoreMessage,
                           textAlign: TextAlign.center,
@@ -170,23 +171,17 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-
-              // --- 2. The Suggestions List ---
               const Text(
                 'AI Suggestions to Improve',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-
-              // --- DYNAMIC LIST ---
               ListView.builder(
                 itemCount: _suggestions.length,
-                shrinkWrap: true, // Important inside a SingleChildScrollView
-                physics:
-                    const NeverScrollableScrollPhysics(), // Let the parent scroll
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final suggestion = _suggestions[index];
-                  // Use your styled card here
                   return _buildSuggestionCard(
                     icon: suggestion['icon'],
                     title: suggestion['title'],
@@ -195,22 +190,18 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
                   );
                 },
               ),
-
               const SizedBox(height: 24),
-              // --- 3. The Edit Button ---
               ElevatedButton(
                 onPressed: () {
-                  // --- THIS IS THE CHANGE ---
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ResumeEditorScreen(
-                        // Pass the list of suggestions to the new screen
+                        // Pass the new list of suggestions
                         suggestions: _suggestions,
                       ),
                     ),
                   );
-                  // --- END OF CHANGE ---
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[600],
@@ -231,8 +222,6 @@ class _AtsResultsScreenState extends State<AtsResultsScreen> {
     );
   }
 
-  // --- 5. Your Suggestion Card Helper ---
-  // You probably already have this, just make sure it's here
   Widget _buildSuggestionCard({
     required IconData icon,
     required String title,

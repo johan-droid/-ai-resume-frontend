@@ -1,25 +1,28 @@
-// lib/profile/candidate_list_screen.dart
+// lib/profile/user_job_search_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package:rezume_app/models/dummy_candidates.dart';
-import 'package:rezume_app/profile/resume_detail_screen.dart';
+import 'package:intl/intl.dart'; // For formatting currency
+import 'package:rezume_app/models/dummy_jobs.dart'; // Import our new dummy jobs
+import 'package:rezume_app/profile/job_application_screen.dart'; // Import the application screen
 
-class CandidateListScreen extends StatefulWidget {
-  const CandidateListScreen({super.key});
+class UserJobSearchScreen extends StatefulWidget {
+  const UserJobSearchScreen({super.key});
 
   @override
-  State<CandidateListScreen> createState() => _CandidateListScreenState();
+  State<UserJobSearchScreen> createState() => _UserJobSearchScreenState();
 }
 
-class _CandidateListScreenState extends State<CandidateListScreen> {
-  List<Candidate> _filteredCandidates = dummyCandidates;
+class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
+  List<SearchableJob> _filteredJobs = dummyJobs;
+  final _numberFormat = NumberFormat.compact(locale: 'en_IN');
 
-  // --- Filter State Variables ---
+  // --- Filter State Variables (from candidate_list_screen.dart) ---
   String _selectedJobProfile = 'Any';
   bool _isWorkFromHome = false;
   bool _isPartTime = false;
   String _selectedSalary = 'Any';
   String _selectedExperience = 'Any';
+  String _selectedLocation = 'Any';
 
   // --- Filter Options ---
   final List<String> _jobProfileOptions = [
@@ -45,37 +48,52 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
     '3-5 years',
     '6+ years'
   ];
+  final List<String> _locationOptions = [
+    'Any',
+    'Mumbai',
+    'Delhi',
+    'Bangalore',
+    'Rourkela',
+    'Kolkata',
+    'Chennai',
+    'Hyderabad',
+    'Pune'
+  ];
 
-  // --- Theme Colors (Indigo for Org) ---
-  final Color _primaryColor = Colors.indigo.shade600;
-  final Color _backgroundColor = Colors.indigo.shade50;
+  // --- Theme Colors (User) ---
+  final Color _primaryColor = Color(0xFF007BFF);
+  final Color _backgroundColor = Color(0xFFF0F8FF);
 
   @override
   void initState() {
     super.initState();
-    _filterCandidates(); // Initial filter
+    _filterJobs(); // Initial filter
   }
 
-  void _filterCandidates() {
-    List<Candidate> tempCandidates = dummyCandidates;
+  // --- Filtering Logic (adapted from candidate_list_screen.dart) ---
+  void _filterJobs() {
+    List<SearchableJob> tempJobs = dummyJobs;
 
     // Job Profile
     if (_selectedJobProfile != 'Any') {
-      tempCandidates = tempCandidates
-          .where((c) => c.jobProfile == _selectedJobProfile)
-          .toList();
+      tempJobs =
+          tempJobs.where((j) => j.role == _selectedJobProfile).toList();
+    }
+
+    // Location
+    if (_selectedLocation != 'Any') {
+      tempJobs =
+          tempJobs.where((j) => j.location == _selectedLocation).toList();
     }
 
     // Work From Home
     if (_isWorkFromHome) {
-      tempCandidates =
-          tempCandidates.where((c) => c.isWorkFromHome == true).toList();
+      tempJobs = tempJobs.where((j) => j.isWorkFromHome == true).toList();
     }
 
     // Part-time
     if (_isPartTime) {
-      tempCandidates =
-          tempCandidates.where((c) => c.jobType == 'Part-time').toList();
+      tempJobs = tempJobs.where((j) => j.jobType == 'Part-time').toList();
     }
 
     // Salary
@@ -84,35 +102,35 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
       if (_selectedSalary == 'At least 2 lakhs') minSalary = 200000;
       if (_selectedSalary == 'At least 4 lakhs') minSalary = 400000;
       if (_selectedSalary == 'At least 6 lakhs') minSalary = 600000;
-      tempCandidates =
-          tempCandidates.where((c) => c.salary >= minSalary).toList();
+      tempJobs = tempJobs.where((j) => j.salaryMin >= minSalary).toList();
     }
 
     // Experience
     if (_selectedExperience != 'Any') {
       if (_selectedExperience == '0-2 years') {
-        tempCandidates =
-            tempCandidates.where((c) => c.experience <= 2).toList();
+        tempJobs =
+            tempJobs.where((j) => j.experienceRequired <= 2).toList();
       }
       if (_selectedExperience == '3-5 years') {
-        tempCandidates = tempCandidates
-            .where((c) => c.experience >= 3 && c.experience <= 5)
+        tempJobs = tempJobs
+            .where((j) =>
+                j.experienceRequired >= 3 && j.experienceRequired <= 5)
             .toList();
       }
       if (_selectedExperience == '6+ years') {
-        tempCandidates =
-            tempCandidates.where((c) => c.experience >= 6).toList();
+        tempJobs = tempJobs.where((j) => j.experienceRequired >= 6).toList();
       }
     }
 
     setState(() {
-      _filteredCandidates = tempCandidates;
+      _filteredJobs = tempJobs;
     });
   }
 
+  // --- Filter Sheet (adapted from candidate_list_screen.dart) ---
   void _showFilterSheet() {
-    // Temporary states for the bottom sheet
     String tempProfile = _selectedJobProfile;
+    String tempLocation = _selectedLocation;
     bool tempWorkFromHome = _isWorkFromHome;
     bool tempPartTime = _isPartTime;
     String tempSalary = _selectedSalary;
@@ -122,12 +140,11 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        // Use StatefulBuilder to manage the sheet's state independently
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setSheetState) {
             return Container(
               padding: const EdgeInsets.all(24.0),
-              height: MediaQuery.of(context).size.height * 0.75,
+              height: MediaQuery.of(context).size.height * 0.8,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -149,6 +166,7 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                   Expanded(
                     child: ListView(
                       children: [
+                        // Job Role
                         DropdownButtonFormField<String>(
                           value: tempProfile,
                           decoration:
@@ -162,6 +180,21 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
+                        // Location
+                        DropdownButtonFormField<String>(
+                          value: tempLocation,
+                          decoration:
+                              _buildInputDecoration('Location', null),
+                          items: _locationOptions.map((String value) {
+                            return DropdownMenuItem<String>(
+                                value: value, child: Text(value));
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setSheetState(() => tempLocation = newValue!);
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        // Checkboxes
                         CheckboxListTile(
                           title: const Text('Work from home'),
                           value: tempWorkFromHome,
@@ -181,6 +214,7 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                           contentPadding: EdgeInsets.zero,
                         ),
                         const SizedBox(height: 16),
+                        // Salary
                         DropdownButtonFormField<String>(
                           value: tempSalary,
                           decoration: _buildInputDecoration(
@@ -194,6 +228,7 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
+                        // Experience
                         DropdownButtonFormField<String>(
                           value: tempExperience,
                           decoration: _buildInputDecoration(
@@ -209,28 +244,29 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                       ],
                     ),
                   ),
+                  // Bottom Buttons
                   Row(
                     children: [
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            // Clear sheet state
                             setSheetState(() {
                               tempProfile = 'Any';
+                              tempLocation = 'Any';
                               tempWorkFromHome = false;
                               tempPartTime = false;
                               tempSalary = 'Any';
                               tempExperience = 'Any';
                             });
-                            // Clear main state and apply
                             setState(() {
                               _selectedJobProfile = 'Any';
+                              _selectedLocation = 'Any';
                               _isWorkFromHome = false;
                               _isPartTime = false;
                               _selectedSalary = 'Any';
                               _selectedExperience = 'Any';
                             });
-                            _filterCandidates();
+                            _filterJobs();
                             Navigator.pop(context);
                           },
                           child: const Text('Clear All'),
@@ -243,15 +279,15 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                       Expanded(
                         child: FilledButton(
                           onPressed: () {
-                            // Apply filters to main state
                             setState(() {
                               _selectedJobProfile = tempProfile;
+                              _selectedLocation = tempLocation;
                               _isWorkFromHome = tempWorkFromHome;
                               _isPartTime = tempPartTime;
                               _selectedSalary = tempSalary;
                               _selectedExperience = tempExperience;
                             });
-                            _filterCandidates(); // Re-run filter
+                            _filterJobs();
                             Navigator.pop(context);
                           },
                           child: const Text('Apply'),
@@ -278,12 +314,12 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
       labelText: label,
       prefixIcon: icon != null ? Icon(icon) : null,
       filled: true,
-      fillColor: _backgroundColor, // Light indigo fill
+      fillColor: _backgroundColor,
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide.none, // No border
+        borderSide: BorderSide.none,
       ),
     );
   }
@@ -291,50 +327,45 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _backgroundColor, // Light indigo background
+      backgroundColor: _backgroundColor,
       appBar: AppBar(
-        title: const Text('Find Candidates'),
-        backgroundColor: _primaryColor, // Indigo AppBar
-        elevation: 0,
-        automaticallyImplyLeading: false,
+        title: const Text('Find a Job'),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        iconTheme: const IconThemeData(color: Colors.black),
+        titleTextStyle: const TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
         actions: [
-          // --- THIS IS THE MODIFIED BUTTON ---
           IconButton(
-            icon: const Icon(Icons.filter_list,
-                color: Colors.white), // <-- ADDED COLOR
+            icon: const Icon(Icons.filter_list),
             onPressed: _showFilterSheet,
             tooltip: 'Filters',
           ),
-          // --- END OF MODIFICATION ---
         ],
       ),
-      body: Column(
-        children: [
-          // --- Candidate List ---
-          Expanded(
-            child: _filteredCandidates.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No candidates match your criteria.',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16.0),
-                    itemCount: _filteredCandidates.length,
-                    itemBuilder: (context, index) {
-                      final candidate = _filteredCandidates[index];
-                      return _buildCandidateCard(candidate);
-                    },
-                  ),
-          ),
-        ],
-      ),
+      body: _filteredJobs.isEmpty
+          ? const Center(
+              child: Text(
+                'No jobs match your criteria.',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: _filteredJobs.length,
+              itemBuilder: (context, index) {
+                final job = _filteredJobs[index];
+                return _buildJobCard(job);
+              },
+            ),
     );
   }
 
-  // --- This card matches your 'image_8d2f46.png' screenshot ---
-  Widget _buildCandidateCard(Candidate candidate) {
+  // --- New Job Card Widget (styled like image_814ea2.png) ---
+  Widget _buildJobCard(SearchableJob job) {
     return Card(
       elevation: 2.0,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -342,12 +373,11 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
         onTap: () {
+          // --- NAVIGATE TO THE APPLICATION SCREEN ---
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ResumeDetailScreen(
-                resumeData: candidate,
-              ),
+              builder: (context) => JobApplicationScreen(job: job),
             ),
           );
         },
@@ -360,21 +390,17 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                 children: [
                   CircleAvatar(
                     backgroundColor: _primaryColor.withOpacity(0.1),
-                    child: Text(
-                      candidate.name.substring(0, 1),
-                      style: TextStyle(
-                          color: _primaryColor, fontWeight: FontWeight.bold),
-                    ),
+                    child: Icon(job.logo, color: _primaryColor),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(candidate.name,
+                        Text(job.role,
                             style: const TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.bold)),
-                        Text(candidate.jobProfile,
+                        Text(job.companyName,
                             style: TextStyle(
                                 fontSize: 15, color: Colors.grey[700])),
                       ],
@@ -385,44 +411,65 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                 ],
               ),
               const SizedBox(height: 12),
-              Row(
-                children: [
-                  Icon(Icons.location_on_outlined,
-                      size: 16, color: Colors.grey[600]),
-                  const SizedBox(width: 4),
-                  Text(candidate.location,
-                      style: TextStyle(color: Colors.grey[600])),
-                  const SizedBox(width: 12),
-                  Icon(Icons.business_center_outlined,
-                      size: 16, color: Colors.grey[600]),
-                  const SizedBox(width: 4),
-                  Text('${candidate.experience} yrs exp.',
-                      style: TextStyle(color: Colors.grey[600])),
-                ],
+              _buildInfoChip(
+                  Icons.location_on_outlined, job.location, Colors.grey[600]!),
+              if (job.isWorkFromHome)
+                _buildInfoChip(
+                    Icons.home_work_outlined, 'Work from home', Colors.grey[600]!),
+              _buildInfoChip(
+                  Icons.currency_rupee_rounded,
+                  '₹${_numberFormat.format(job.salaryMin)} - ₹${_numberFormat.format(job.salaryMax)} /year',
+                  Colors.grey[600]!),
+              _buildInfoChip(Icons.business_center_outlined,
+                  '${job.experienceRequired} year(s)', Colors.grey[600]!),
+              const SizedBox(height: 8),
+              Text(
+                job.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.grey[800]),
               ),
-              if (candidate.skills.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 6.0,
-                  runSpacing: 4.0,
-                  children: candidate.skills
-                      .take(3)
-                      .map((skill) => Chip(
-                            label: Text(skill),
-                            backgroundColor: _backgroundColor,
-                            labelStyle: TextStyle(
-                                fontSize: 12, color: _primaryColor),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 0),
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                          ))
-                      .toList(),
-                ),
-              ]
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildTagChip(job.postedAgo, Colors.green),
+                  _buildTagChip(job.jobType, Colors.blue),
+                ],
+              )
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoChip(IconData icon, String text, Color color) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4.0),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: color),
+          const SizedBox(width: 6),
+          Text(text, style: TextStyle(color: color, fontSize: 14)),
+        ],
+      ),
+    );
+  }
+
+  // --- *** THIS IS THE FIX *** ---
+  Widget _buildTagChip(String text, MaterialColor color) { // <-- FIX: Changed Color to MaterialColor
+  // --- *** END OF FIX *** ---
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        text,
+        style:
+            TextStyle(color: color.shade700, fontWeight: FontWeight.w500),
       ),
     );
   }

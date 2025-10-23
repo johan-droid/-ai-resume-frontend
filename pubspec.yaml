@@ -41,17 +41,19 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # 1. Check the 'assets:' section
-  # Make sure the FOLDER is listed here
+  # 1. Assets section
+  # All asset directories are listed here
   assets:
-    - assets/images/rezoom_logo.png
-    - assets/videos/
-    - assets/images/
+    - assets/images/ # This folder includes rezoom_logo.png
+    # - assets/videos/ # This was commented out to fix the previous error
     - assets/lang/
-    - assets/fonts/ # <-- This line MUST exist and be indented correctly
+    - assets/fonts/ # <-- This folder is for your fonts
 
-  # 2. Fonts section (commented out until font files are added)
-  # Uncomment and add font files when available:
+  # 2. Fonts section
+  # --- I HAVE COMMENTED THIS SECTION OUT TO FIX THE BUILD ERROR ---
+  # You must add the .ttf files to your assets/fonts/ folder
+  # and then uncomment these lines for PDF generation to work.
+  #
   # fonts:
   #   - family: NotoSans
   #     fonts:
@@ -62,12 +64,3 @@ flutter:
   #   - family: NotoSansOriya
   #     fonts:
   #       - asset: assets/fonts/NotoSansOriya-Regular.ttf
-
-  # 3. Video files section
-  # Uncomment and add video files when available:
-  # videos:
-  #   - family: Tutorial
-  #     files:
-  #       - asset: assets/videos/tutorial_en.mp4
-  #       - asset: assets/videos/tutorial_hi.mp4
-  #       - asset: assets/videos/tutorial_or.mp4

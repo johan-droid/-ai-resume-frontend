@@ -1,3 +1,5 @@
+// lib/profile/profile_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:rezume_app/screens/auth/login_screen.dart';
 import 'package:rezume_app/profile/help_center_screen.dart';
@@ -5,6 +7,13 @@ import 'package:rezume_app/profile/edit_profile_screen.dart';
 import 'package:rezume_app/profile/saved_resumes_screen.dart';
 import 'package:rezume_app/profile/org_edit_profile_screen.dart';
 import 'package:rezume_app/profile/company_list_screen.dart';
+// --- IMPORT THE NEWLY CREATED LIST SCREEN ---
+import 'package:rezume_app/profile/posted_jobs_screen.dart';
+// --- (The import for CreateJobScreen is no longer needed here) ---
+// import 'package:rezume_app/profile/create_job_screen.dart';
+
+// --- *** IMPORT THE NEW JOB SEARCH SCREEN *** ---
+import 'package:rezume_app/profile/user_job_search_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String role; // 'User' or 'Organization'
@@ -30,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _profileAvatarText = '';
   String _profileEmail = '';
 
-  // Update the _menuItems list to include the new company list option
+  // This list is not actively used by the builder logic below
   final List<Map<String, dynamic>> _menuItems = [
     {
       'title': 'My Saved Resumes',
@@ -73,14 +82,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF0F4F8),
       appBar: AppBar(
-        title: Text(widget.role == 'User' ? 'Your Profile' : 'Organization Profile'),
+        title: Text(
+            widget.role == 'User' ? 'Your Profile' : 'Organization Profile'),
         backgroundColor: _currentPrimaryColor,
         elevation: 0,
+        automaticallyImplyLeading: false, // Removed back button
       ),
       body: Column(
         children: [
           // --- 1. NEW REDESIGNED HEADER ---
-          // This replaces the blue box
           Padding(
             padding: const EdgeInsets.only(top: 30.0),
             child: Column(
@@ -90,7 +100,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   backgroundColor: _currentPrimaryColor.withOpacity(0.1),
                   child: Text(
                     _profileAvatarText,
-                    style: TextStyle(fontSize: 48, color: _currentPrimaryColor, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 48,
+                        color: _currentPrimaryColor,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -115,7 +128,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
 
           // --- 2. REDESIGNED BUTTONS ---
-          // This uses the cleaner Material 3 list tiles
           Expanded(
             child: ListView(
               padding: const EdgeInsets.only(top: 30.0),
@@ -153,7 +165,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                   color: _currentPrimaryColor,
                 ),
-                if (widget.role == 'User')
+
+                // --- *** MODIFIED SECTION *** ---
+                if (widget.role == 'User') ...[
+                  // USER ONLY: My Saved Resumes
                   _buildProfileOption(
                     icon: Icons.article_outlined,
                     title: 'My Saved Resumes',
@@ -166,27 +181,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                     color: _currentPrimaryColor,
-                  )
-                else
+                  ),
+
+                  // --- *** NEW BUTTON AS REQUESTED *** ---
                   _buildProfileOption(
-                    icon: Icons.subscriptions_outlined,
-                    title: 'Ongoing Plan',
-                    onTap: () { /* Navigate to subscription details */ },
+                    // --- *** THIS IS THE FIX *** ---
+                    icon: Icons.work_outline_rounded, // <-- FINAL FIX
+                    // --- *** END OF FIX *** ---
+                    title: 'Apply for Jobs',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UserJobSearchScreen(),
+                        ),
+                      );
+                    },
                     color: _currentPrimaryColor,
                   ),
-                _buildProfileOption(
-                  icon: Icons.business_center_outlined,
-                  title: 'Apply to Companies',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CompanyListScreen(),
-                      ),
-                    );
-                  },
-                  color: _currentPrimaryColor,
-                ),
+                  // --- *** END OF NEW BUTTON *** ---
+                ] else
+                  // ORGANIZATION ONLY: Create Job
+                  _buildProfileOption(
+                    icon: Icons.add_business_rounded, // Changed icon
+                    title: 'Create Job', // Changed title
+                    onTap: () {
+                      // --- THIS IS THE MODIFICATION ---
+                      // Navigate to the new PostedJobsScreen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PostedJobsScreen(themeColor: _currentPrimaryColor),
+                        ),
+                      );
+                      // --- END OF MODIFICATION ---
+                    },
+                    color: _currentPrimaryColor,
+                  ),
+
+                // --- "Apply to Companies" button has been REMOVED ---
+                // --- END OF MODIFICATION ---
+
                 _buildProfileOption(
                   icon: Icons.help_outline_rounded,
                   title: 'Help Center',

@@ -1,3 +1,5 @@
+// lib/templates/resume_builder_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:rezume_app/models/resume_template_model.dart';
 // For font loading
@@ -5,6 +7,85 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+// --- NEW: Dummy Data from modern-driver-resume.pdf ---
+// This map will serve as the base for the generated PDF
+final Map<String, dynamic> _fullDriverResumeData = {
+  'fullName': 'Rajesh Kumar Singh',
+  'jobTitle': 'Professional Driver',
+  'contact': {
+    'phone': '+91 98765 43210',
+    'email': 'rajesh.kumar@email.com',
+    'location': 'Mumbai, Maharashtra'
+  },
+  'license': 'Valid Driving License (LMV & HMV)',
+  'summary':
+      'Reliable and safety-focused professional driver with 8+ years of experience in passenger and goods transportation. Proven track record of maintaining a 100% accident-free driving record while delivering exceptional customer service. Skilled in route optimization, vehicle maintenance, and compliance with traffic regulations. Committed to punctuality and ensuring safe, comfortable journeys for all passengers.',
+  'skills': [
+    'Defensive Driving',
+    'Route Planning & GPS Navigation',
+    'Vehicle Maintenance & Inspection',
+    'Time Management',
+    'Customer Service Excellence',
+    'Traffic Law Compliance',
+    'Load Securing & Cargo Management',
+    'DOT Regulations Knowledge',
+    'Clean Driving Record',
+    'Fuel Efficiency Optimization',
+    'Emergency Response',
+    'Multi-vehicle Operation',
+  ],
+  'experience': [
+    {
+      'position': 'Senior Company Driver',
+      'company': 'Tata Corporate Services | Mumbai, MH',
+      'duration': 'June 2020 - Present',
+      'details': [
+        'Safely transport executives and VIP clients across Mumbai metropolitan area, maintaining 99% on-time performance record',
+        'Reduced fuel costs by 18% through strategic route optimization and efficient driving practices, saving 85,000 annually',
+        'Maintained pristine vehicle condition with zero breakdown incidents over 4 years through proactive maintenance',
+        'Awarded \'Driver of the Year 2023\' for outstanding service and zero traffic violations',
+        'Successfully managed scheduling for 5+ executives simultaneously, coordinating 30+ trips weekly',
+      ]
+    },
+    {
+      'position': 'Delivery Driver',
+      'company': 'Amazon Logistics India | Mumbai, MH',
+      'duration': 'March 2018 - May 2020',
+      'details': [
+        'Delivered 150+ packages daily across urban and suburban routes with 98.5% on-time delivery rate',
+        'Achieved customer satisfaction rating of 4.9/5 through professional conduct and careful package handling',
+        'Completed over 12,000 deliveries with zero damage claims or lost packages',
+        'Implemented efficient route planning that increased delivery capacity by 25% without compromising safety',
+      ]
+    },
+    {
+      'position': 'Private Chauffeur',
+      'company': 'Elite Car Rentals | Pune, MΗ',
+      'duration': 'January 2016 - February 2018',
+      'details': [
+        'Provided luxury transportation services to high-profile clients including business executives and tourists',
+        'Maintained 100% punctuality record for airport transfers and corporate events',
+        'Received 95% positive feedback from clients, resulting in 40% repeat customer rate',
+        'Performed daily vehicle inspections and coordinated maintenance schedules for fleet of 8 premium vehicles',
+      ]
+    },
+  ],
+  'education': {
+    'degree': 'Higher Secondary Certificate (12th)',
+    'institution': 'Maharashtra State Board | Pune, Maharashtra',
+    'year': '2015',
+  },
+  'certifications': [
+    'Valid LMV & HMV Driving License (Exp: 2028)',
+    'Defensive Driving Certification - National Safety Council (2022)',
+    'First Aid & CPR Certified - Red Cross India (2023)',
+    'Vehicle Maintenance Training - Auto Service Training Institute (2021)',
+    'GPS Navigation & Route Optimization Workshop (2020)',
+  ],
+  'languages': ['English', 'Hindi', 'Marathi'],
+};
+// --- END: Dummy Data ---
 
 class ChatMessage {
   final String text;
@@ -15,22 +96,20 @@ class ChatMessage {
 
 class ResumeBuilderScreen extends StatefulWidget {
   final ResumeTemplate template;
-  // --- ADD THIS ---
   final String templateName;
 
   const ResumeBuilderScreen({
     super.key,
     required this.template,
-    required this.templateName, // <-- Make it required
+    required this.templateName,
   });
-  // --- END OF CHANGE ---
 
   @override
   State<ResumeBuilderScreen> createState() => _ResumeBuilderScreenState();
 }
 
 class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
-  // 3. Defines the entire conversation flow
+  // This is the chat flow, unchanged
   final List<Map<String, String>> _questionFlow = [
     {
       'key': 'fullName',
@@ -75,13 +154,10 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
 
   final List<ChatMessage> _messages = [];
   final TextEditingController _textController = TextEditingController();
-  // Controller for the text input field
-  // FocusNode to manage focus on the chat input
   final FocusNode _chatFocusNode = FocusNode();
   int _currentQuestionIndex = 0;
+  // This map stores the user's answers from the chat
   final Map<String, String> _resumeDetails = {};
-
-  // --- ADD THIS VARIABLE ---
   bool _isConversationComplete = false;
 
   @override
@@ -97,10 +173,8 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
     super.dispose();
   }
 
-  // This function adds the next bot question to the chat
   void _askQuestion() {
     if (_currentQuestionIndex < _questionFlow.length) {
-      // If there are more questions, add the next one
       setState(() {
         _messages.add(ChatMessage(
           text: _questionFlow[_currentQuestionIndex]['question']!,
@@ -108,65 +182,250 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
         ));
       });
     } else {
-      // If the conversation is over
       setState(() {
         _messages.add(ChatMessage(
           text:
-              'Great! Your profile is complete. We will start finding the best jobs for you. Thank you.',
+              'Great! Your profile is complete. You can now generate your PDF resume.',
           isUser: false,
         ));
-
-        // --- THIS IS THE CHANGE ---
-        _isConversationComplete = true; // This will show the new button
-        // --- END OF CHANGE ---
+        _isConversationComplete = true;
       });
-      // Now you can save the _resumeDetails map to your database or state manager
       print('Final Job Profile Details: $_resumeDetails');
-
-      // You could navigate away after a delay:
-      // Future.delayed(Duration(seconds: 3), () => Navigator.pop(context));
     }
   }
 
   void _sendMessage() {
-    // --- ADD THIS LINE ---
-    if (_isConversationComplete) return; // Don't do anything if chat is over
-    // --- END OF CHANGE ---
+    if (_isConversationComplete) return;
 
     String userInput = _textController.text.trim();
     if (userInput.isEmpty) return;
 
-    // Add user message to chat
     setState(() {
       _messages.add(ChatMessage(text: userInput, isUser: true));
     });
 
-    // Store the answer
     if (_currentQuestionIndex < _questionFlow.length) {
       String key = _questionFlow[_currentQuestionIndex]['key']!;
       _resumeDetails[key] = userInput;
       _currentQuestionIndex++;
     }
 
-    // Clear the text field
     _textController.clear();
-
-    // --- THIS IS THE FIX ---
-    // If the conversation is not over, return focus to the chat box
     if (!_isConversationComplete) {
       _chatFocusNode.requestFocus();
     }
-    // --- END OF FIX ---
 
-    // Ask the next question after a short delay
     Future.delayed(const Duration(milliseconds: 500), () {
       _askQuestion();
     });
   }
 
+  // --- NEW: Full PDF Generation ---
+  Future<void> _generateFullPdf() async {
+    final pdf = pw.Document();
+    pw.ThemeData myTheme;
+
+    // Load fonts
+    try {
+      final fontData =
+          await rootBundle.load("assets/fonts/NotoSans-Regular.ttf");
+      final hindiFontData =
+          await rootBundle.load("assets/fonts/NotoSansDevanagari-Regular.ttf");
+      final odiaFontData =
+          await rootBundle.load("assets/fonts/NotoSansOriya-Regular.ttf");
+      final ttf = pw.Font.ttf(fontData);
+      final hindiTtf = pw.Font.ttf(hindiFontData);
+      final odiaTtf = pw.Font.ttf(odiaFontData);
+      myTheme = pw.ThemeData.withFont(
+        base: ttf,
+        fontFallback: [hindiTtf, odiaTtf],
+      );
+    } catch (e) {
+      print('Custom fonts not found. Using default fonts. Error: $e');
+      myTheme = pw.ThemeData.base();
+    }
+
+    // --- Combine User Data with Dummy Data ---
+    // User data from chat takes priority
+    final String fullName =
+        _resumeDetails['fullName'] ?? _fullDriverResumeData['fullName'];
+    final String jobTitle =
+        _resumeDetails['jobType'] ?? _fullDriverResumeData['jobTitle'];
+    final String phone =
+        _resumeDetails['phone'] ?? _fullDriverResumeData['contact']['phone'];
+    final String location =
+        _resumeDetails['city'] ?? _fullDriverResumeData['contact']['location'];
+    final String email = _fullDriverResumeData['contact']['email']; // From dummy
+    final String license = _fullDriverResumeData['license']; // From dummy
+    final String summary = _fullDriverResumeData['summary']; // From dummy
+    final List skills = _fullDriverResumeData['skills']; // From dummy
+    final List experience = _fullDriverResumeData['experience']; // From dummy
+    final Map education = _fullDriverResumeData['education']; // From dummy
+    final List certifications =
+        _fullDriverResumeData['certifications']; // From dummy
+
+    pdf.addPage(
+      pw.Page(
+        theme: myTheme,
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              // --- Header (Uses User Data) ---
+              pw.Text(
+                fullName,
+                style:
+                    pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.only(top: 4.0, bottom: 8.0),
+                child: pw.Text(
+                  jobTitle,
+                  style: const pw.TextStyle(fontSize: 16, color: PdfColors.grey),
+                ),
+              ),
+
+              // --- Contact (Uses User Data) ---
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Text(phone),
+                  pw.Text(email),
+                  pw.Text(location),
+                ],
+              ),
+              pw.Padding(
+                padding: const pw.EdgeInsets.only(top: 4.0),
+                child: pw.Text(
+                  'License: $license',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                ),
+              ),
+
+              // --- Summary (Uses Dummy Data) ---
+              pw.SizedBox(height: 12),
+              _buildPdfSection('Professional Summary', myTheme),
+              pw.Text(summary),
+
+              // --- Skills (Uses Dummy Data) ---
+              pw.SizedBox(height: 12),
+              _buildPdfSection('Core Skills', myTheme),
+              pw.Wrap(
+                spacing: 6.0,
+                runSpacing: 6.0,
+                children:
+                    skills.map((s) => pw.Text('• ${s.toString()}')).toList(),
+              ),
+
+              // --- Experience (Uses Dummy Data) ---
+              pw.SizedBox(height: 12),
+              _buildPdfSection('Work Experience', myTheme),
+              ...experience.map((exp) {
+                final Map<String, dynamic> e =
+                    exp is Map<String, dynamic> ? exp : {};
+                final expDetails = e['details'] as List? ?? [];
+                return pw.Padding(
+                  padding: const pw.EdgeInsets.symmetric(vertical: 6.0),
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text(
+                        e['position']?.toString() ?? '',
+                        style: pw.TextStyle(
+                            fontSize: 16, fontWeight: pw.FontWeight.bold),
+                      ),
+                      pw.Text(
+                        '${e['company']?.toString() ?? ''} | ${e['duration']?.toString() ?? ''}',
+                        style: const pw.TextStyle(color: PdfColors.grey700),
+                      ),
+                      if (expDetails.isNotEmpty) pw.SizedBox(height: 4),
+                      ...expDetails.map(
+                        (d) => pw.Padding(
+                          padding: const pw.EdgeInsets.symmetric(vertical: 2.0),
+                          child: pw.Row(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              pw.Text('• ',
+                                  style: const pw.TextStyle(fontSize: 14)),
+                              pw.Expanded(child: pw.Text(d.toString())),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+              
+              // --- Education & Certs (Split to new page if needed) ---
+              pw.Wrap(
+                children: [
+                   pw.Container(
+                    width: 240, // Half page width
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                         pw.SizedBox(height: 12),
+                        _buildPdfSection('Education', myTheme),
+                        pw.Text(
+                          education['degree']?.toString() ?? '',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
+                        pw.Text(education['institution']?.toString() ?? ''),
+                        if ((education['year'] ?? '').toString().isNotEmpty)
+                          pw.Text('Year: ${education['year']}'),
+                      ]
+                    )
+                  ),
+                   pw.Container(
+                    width: 240, // Half page width
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                         pw.SizedBox(height: 12),
+                        _buildPdfSection('Certifications & Licenses', myTheme),
+                        ...certifications.map(
+                          (l) => pw.Padding(
+                            padding: const pw.EdgeInsets.symmetric(vertical: 2.0),
+                            child: pw.Text('• ${l.toString()}'),
+                          ),
+                        ),
+                      ]
+                    )
+                  ),
+                ]
+              )
+            ],
+          );
+        },
+      ),
+    );
+    await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
+  }
+
+  // --- PDF Helper Widget ---
+  pw.Widget _buildPdfSection(String title, pw.ThemeData theme) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          title,
+          style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+        ),
+        pw.Divider(thickness: 1, color: PdfColors.black),
+        pw.SizedBox(height: 6),
+      ],
+    );
+  }
+  // --- END: PDF Generation ---
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF0F8FF),
       appBar: AppBar(
         title: Text("Building with '${widget.templateName}'"),
         backgroundColor: Colors.white,
@@ -174,170 +433,53 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
       ),
       body: Column(
         children: [
-          // 1. Your chat message list
           Expanded(
-            child: ListView(
+            child: ListView.builder(
+              reverse: false,
               padding: const EdgeInsets.all(16.0),
-              children: _messages
-                  .map((message) => _buildChatMessage(
-                        isUser: message.isUser,
-                        message: message.text,
-                      ))
-                  .toList(),
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final message = _messages[index];
+                return _buildChatMessage(
+                  isUser: message.isUser,
+                  message: message.text,
+                );
+              },
             ),
           ),
-
-          // --- THIS IS THE CHANGE ---
-
-          // 2. Conditionally show the "Generate" button
           if (_isConversationComplete) _buildGenerateButton(),
-
-          // 3. Conditionally show the text input bar
           if (!_isConversationComplete) _buildChatInput(),
-
-          // --- END OF CHANGE ---
         ],
       ),
     );
   }
 
-  // --- ADD THIS PDF GENERATION FUNCTION ---
-  Future<void> _generateDummyPdf() async {
-    final pdf = pw.Document();
-
-    // --- Load Fonts with Error Handling ---
-    pw.ThemeData myTheme;
-    
-    try {
-      // Try to load custom fonts
-      final fontData = await rootBundle.load("assets/fonts/NotoSans-Regular.ttf");
-      final hindiFontData = await rootBundle.load("assets/fonts/NotoSansDevanagari-Regular.ttf");
-      final odiaFontData = await rootBundle.load("assets/fonts/NotoSansOriya-Regular.ttf");
-
-      final ttf = pw.Font.ttf(fontData);
-      final hindiTtf = pw.Font.ttf(hindiFontData);
-      final odiaTtf = pw.Font.ttf(odiaFontData);
-
-      // Define Theme with Fallback Fonts
-      myTheme = pw.ThemeData.withFont(
-        base: ttf,
-        fontFallback: [hindiTtf, odiaTtf], // Use Hindi/Odia fonts when needed
-      );
-    } catch (e) {
-      // If fonts are missing, use default theme and show message
-      print('Custom fonts not found. Using default fonts. Error: $e');
-      myTheme = pw.ThemeData.base();
-      
-      // Show user-friendly message
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Note: Using default fonts. Add Noto fonts for better multilingual support.'),
-            duration: Duration(seconds: 3),
-          ),
-        );
-      }
-    }
-
-    // --- Get the dummy data collected from chat ---
-    final name = _resumeDetails['fullName'] ?? 'N/A';
-    final phone = _resumeDetails['phone'] ?? 'N/A';
-    final city = _resumeDetails['city'] ?? 'N/A';
-    final jobType = _resumeDetails['jobType'] ?? 'N/A';
-    final experience = _resumeDetails['experience'] ?? 'N/A';
-    final qualification = _resumeDetails['qualification'] ?? 'N/A';
-    final skills = _resumeDetails['skills'] ?? 'N/A';
-    final availability = _resumeDetails['availability'] ?? 'N/A';
-
-    // --- Build the PDF Page ---
-    pdf.addPage(
-      pw.Page(
-        theme: myTheme, // Apply the theme with fallback fonts
-        pageFormat: PdfPageFormat.a4,
-        build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Center(
-                child: pw.Text(name, style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
-              ),
-              pw.Center(
-                child: pw.Text('$phone | $city'),
-              ),
-              pw.SizedBox(height: 20),
-
-              pw.Text('Job Objective', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-              pw.Divider(),
-              pw.Text('Seeking a $jobType position.'),
-              pw.SizedBox(height: 15),
-
-              pw.Text('Experience', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-              pw.Divider(),
-              pw.Text('$experience years'),
-              pw.SizedBox(height: 15),
-
-              pw.Text('Qualification', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-              pw.Divider(),
-              pw.Text(qualification),
-              pw.SizedBox(height: 15),
-
-              pw.Text('Skills', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-              pw.Divider(),
-              pw.Text(skills),
-              pw.SizedBox(height: 15),
-
-              pw.Text('Availability', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-              pw.Divider(),
-              pw.Text(availability),
-            ],
-          );
-        },
-      ),
-    );
-
-    // --- Show Preview/Save Screen ---
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
-    );
-  }
-
-  // --- ADD THIS ENTIRE NEW METHOD ---
   Widget _buildGenerateButton() {
     return Padding(
-      // Add padding so it's not stuck to the bottom
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-      child: Column(
-        children: [
-          ElevatedButton.icon(
-            icon: const Icon(Icons.description_rounded, size: 20),
-            label: const Text('Generate PDF Resume'),
-            onPressed: _generateDummyPdf,
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  const Color(0xFF007BFF), // Your app's theme color
-              foregroundColor: Colors.white,
-              minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              textStyle: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+      child: ElevatedButton.icon(
+        icon: const Icon(Icons.description_rounded, size: 20),
+        label: const Text('Generate PDF Resume'),
+        // --- THIS IS THE CHANGE ---
+        onPressed: _generateFullPdf, // Call the new function
+        // --- END OF CHANGE ---
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF007BFF),
+          foregroundColor: Colors.white,
+          minimumSize: const Size(double.infinity, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
           ),
-          const SizedBox(height: 8),
-          // This adds the text you wanted
-          Text(
-            'Uses Google Translate for multilingual support.',
-            style: TextStyle(color: Colors.grey[600], fontSize: 12),
-          )
-        ],
+          textStyle: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }
 
-  // Helper method to build the chat input field
+  // Chat input UI (Unchanged)
   Widget _buildChatInput() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -348,6 +490,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 5,
+            offset: const Offset(0, -2),
           ),
         ],
       ),
@@ -364,7 +507,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.grey.shade200,
+                fillColor: Colors.grey.shade100,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
               ),
               onSubmitted: (text) => _sendMessage(),
@@ -372,7 +515,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
           ),
           const SizedBox(width: 8.0),
           IconButton(
-            icon: const Icon(Icons.send, color: Colors.blueAccent),
+            icon: const Icon(Icons.send, color: Color(0xFF007BFF)),
             onPressed: _sendMessage,
           ),
         ],
@@ -380,7 +523,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
     );
   }
 
-  // Helper widget to build a chat bubble
+  // Chat bubble UI (Unchanged)
   Widget _buildChatMessage({required bool isUser, required String message}) {
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
@@ -388,12 +531,24 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
         margin: const EdgeInsets.symmetric(vertical: 5.0),
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: isUser ? Colors.blueAccent : Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(15.0),
+          color: isUser ? const Color(0xFF007BFF) : Colors.white,
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: isUser
+              ? []
+              : [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.15),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: const Offset(0, 1),
+                  )
+                ],
         ),
         child: Text(
           message,
-          style: TextStyle(color: isUser ? Colors.white : Colors.black87),
+          style: TextStyle(
+            color: isUser ? Colors.white : Colors.black87,
+          ),
         ),
       ),
     );

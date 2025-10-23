@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rezume_app/models/resume_template_model.dart';
-import 'package:rezume_app/templates/resume_builder_screen.dart'; // Corrected path
+import 'package:rezume_app/templates/resume_builder_screen.dart';
 
 class TemplatesScreen extends StatefulWidget {
   const TemplatesScreen({super.key});
@@ -16,33 +16,45 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         id: '1',
         name: 'Modern',
         imageUrl:
-            'https://placehold.co/400x560/EBF4FF/3A506B?text=Modern&font=poppins'),
+            // Using a real image placeholder
+            'https://d.resume.io/api/files/1831405/resume-template-modern-1.png'),
     ResumeTemplate(
         id: '2',
         name: 'Classic',
         imageUrl:
-            'https://placehold.co/400x560/EBF4FF/3A506B?text=Classic&font=poppins'),
+            'https://d.resume.io/api/files/1831405/resume-template-professional-1.png'),
     ResumeTemplate(
         id: '3',
         name: 'Creative',
         imageUrl:
-            'https://placehold.co/400x560/EBF4FF/3A506B?text=Creative&font=poppins'),
+            'https://d.resume.io/api/files/1831405/resume-template-creative-1.png'),
     ResumeTemplate(
         id: '4',
         name: 'Professional',
         imageUrl:
-            'https://placehold.co/400x560/EBF4FF/3A506B?text=Pro&font=poppins'),
+            'https://d.resume.io/api/files/1831405/resume-template-simple-1.png'),
     ResumeTemplate(
         id: '5',
         name: 'Simple',
         imageUrl:
-            'https://placehold.co/400x560/EBF4FF/3A506B?text=Simple&font=poppins'),
+            'https://d.resume.io/api/files/1831405/resume-template-basic-1.png'),
     ResumeTemplate(
         id: '6',
         name: 'Technical',
         imageUrl:
-            'https://placehold.co/400x560/EBF4FF/3A506B?text=Tech&font=poppins'),
+            'https://d.resume.io/api/files/1831405/resume-template-minimalist-1.png'),
   ];
+
+  // --- ADD THIS MAP ---
+  final Map<String, IconData> _templateIcons = {
+    'Modern': Icons.vignette_outlined,
+    'Classic': Icons.class_outlined,
+    'Creative': Icons.brush_outlined,
+    'Professional': Icons.business_center_outlined,
+    'Simple': Icons.text_snippet_outlined,
+    'Technical': Icons.code_outlined,
+  };
+  // --- END OF ADDITION ---
 
   @override
   Widget build(BuildContext context) {
@@ -53,149 +65,109 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         backgroundColor: Colors.white,
         elevation: 1,
       ),
-      body: GridView.count(
-        crossAxisCount: 2, // Two columns
+      // --- MODIFIED: Switched to GridView.builder ---
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // Two columns
+          mainAxisSpacing: 16.0, // Spacing between rows
+          crossAxisSpacing: 16.0, // Spacing between columns
+          childAspectRatio: 0.7, // Adjust aspect ratio for images
+        ),
         padding: const EdgeInsets.all(16.0),
-        mainAxisSpacing: 16.0, // Spacing between rows
-        crossAxisSpacing: 16.0, // Spacing between columns
-        children: [
-          _buildTemplateCard(
-            icon: Icons.article_outlined,
-            title: 'Modern',
+        itemCount: _templates.length,
+        itemBuilder: (context, index) {
+          final template = _templates[index];
+          return _buildTemplateCard(
+            template: template,
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ResumeBuilderScreen(
-                    template: _templates[0],
-                    templateName: 'Modern',
+                    template: template,
+                    templateName: template.name,
                   ),
                 ),
               );
             },
-          ),
-          _buildTemplateCard(
-            icon: Icons.school_outlined,
-            title: 'Classic',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ResumeBuilderScreen(
-                    template: _templates[1],
-                    templateName: 'Classic',
-                  ),
-                ),
-              );
-            },
-          ),
-          _buildTemplateCard(
-            icon: Icons.brush_outlined,
-            title: 'Creative',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ResumeBuilderScreen(
-                    template: _templates[2],
-                    templateName: 'Creative',
-                  ),
-                ),
-              );
-            },
-          ),
-          _buildTemplateCard(
-            icon: Icons.business_center_outlined,
-            title: 'Professional',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ResumeBuilderScreen(
-                    template: _templates[3],
-                    templateName: 'Professional',
-                  ),
-                ),
-              );
-            },
-          ),
-          _buildTemplateCard(
-            icon: Icons.code_outlined,
-            title: 'Technical',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ResumeBuilderScreen(
-                    template: _templates[5],
-                    templateName: 'Technical',
-                  ),
-                ),
-              );
-            },
-          ),
-          _buildTemplateCard(
-            icon: Icons.person_outline,
-            title: 'Simple',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ResumeBuilderScreen(
-                    template: _templates[4],
-                    templateName: 'Simple',
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+          );
+        },
       ),
+      // --- END OF MODIFICATION ---
     );
   }
 
-  // Helper method for building the new template cards
+  // --- MODIFIED: Helper method for building the new template cards ---
   Widget _buildTemplateCard({
-    required IconData icon,
-    required String title,
+    required ResumeTemplate template,
     required VoidCallback onTap,
   }) {
-    // These are the same colors from your profile screen
-    const Color color = Color(0xFF0056b3); // Dark blue
-    const Color bgColor = Color(0xFFf0f8ff); // Light blue
-
     return Card(
-      elevation: 2.0, // Adds a subtle shadow
-      color: bgColor,
+      elevation: 2.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
+      clipBehavior: Clip.antiAlias, // Clips the image to the card's shape
       child: InkWell(
-        // Makes the whole card tappable
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 50, // Large, clear icon
-                color: color,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: color,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // --- THIS IS THE MODIFICATION ---
+            // 1. The Icon (replacing Image.network)
+            Container(
+              color: Colors.grey[200], // Light placeholder background
+              child: Center(
+                child: Icon(
+                  _templateIcons[template.name] ?? Icons.article_outlined, // Use mapped icon
+                  size: 80,
+                  color: Colors.grey[400],
                 ),
               ),
-            ],
-          ),
+            ),
+            // --- END OF MODIFICATION ---
+
+            // 2. The Gradient Overlay
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 60,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.8),
+                      Colors.black.withOpacity(0.0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // 3. The Text
+            Positioned(
+              bottom: 12,
+              left: 12,
+              right: 12,
+              child: Text(
+                template.name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      blurRadius: 2.0,
+                      color: Colors.black54,
+                      offset: Offset(1.0, 1.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
