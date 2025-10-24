@@ -242,9 +242,8 @@ class SavedResumesScreen extends StatelessWidget {
                 pw.Wrap(
                   spacing: 6.0,
                   runSpacing: 6.0,
-                  children: skills
-                      .map((s) => pw.Text('• ${s.toString()}'))
-                      .toList(),
+                  children:
+                      skills.map((s) => pw.Text('• ${s.toString()}')).toList(),
                 ),
               ],
 
@@ -268,8 +267,7 @@ class SavedResumesScreen extends StatelessWidget {
                         ),
                         pw.Text(
                           '${e['company']?.toString() ?? ''} | ${e['duration']?.toString() ?? ''}',
-                          style:
-                              const pw.TextStyle(color: PdfColors.grey700),
+                          style: const pw.TextStyle(color: PdfColors.grey700),
                         ),
                         if (expDetails.isNotEmpty) pw.SizedBox(height: 4),
                         ...expDetails.map(
@@ -316,8 +314,7 @@ class SavedResumesScreen extends StatelessWidget {
                     _buildPdfSection('Certifications & Licenses', myTheme),
                     ...certifications.map(
                       (l) => pw.Padding(
-                        padding:
-                            const pw.EdgeInsets.symmetric(vertical: 2.0),
+                        padding: const pw.EdgeInsets.symmetric(vertical: 2.0),
                         child: pw.Text('• ${l.toString()}'),
                       ),
                     ),
