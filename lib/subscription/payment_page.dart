@@ -9,10 +9,10 @@ class PaymentPage extends StatefulWidget {
   final Color planColor;
 
   const PaymentPage({
-    Key? key,
+    super.key,
     required this.plan,
     required this.planColor,
-  }) : super(key: key);
+  });
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();

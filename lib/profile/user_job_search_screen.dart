@@ -168,7 +168,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
                       children: [
                         // Job Role
                         DropdownButtonFormField<String>(
-                          value: tempProfile,
+                          initialValue: tempProfile,
                           decoration:
                               _buildInputDecoration('Job Role', null),
                           items: _jobProfileOptions.map((String value) {
@@ -182,7 +182,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
                         const SizedBox(height: 16),
                         // Location
                         DropdownButtonFormField<String>(
-                          value: tempLocation,
+                          initialValue: tempLocation,
                           decoration:
                               _buildInputDecoration('Location', null),
                           items: _locationOptions.map((String value) {
@@ -216,7 +216,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
                         const SizedBox(height: 16),
                         // Salary
                         DropdownButtonFormField<String>(
-                          value: tempSalary,
+                          initialValue: tempSalary,
                           decoration: _buildInputDecoration(
                               'Annual salary (in lakhs)', null),
                           items: _salaryOptions.map((String value) {
@@ -230,7 +230,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
                         const SizedBox(height: 16),
                         // Experience
                         DropdownButtonFormField<String>(
-                          value: tempExperience,
+                          initialValue: tempExperience,
                           decoration: _buildInputDecoration(
                               'Years of experience', null),
                           items: _experienceOptions.map((String value) {
@@ -269,10 +269,10 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
                             _filterJobs();
                             Navigator.pop(context);
                           },
-                          child: const Text('Clear All'),
                           style: OutlinedButton.styleFrom(
                             minimumSize: const Size(0, 50),
                           ),
+                          child: const Text('Clear All'),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -290,11 +290,11 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
                             _filterJobs();
                             Navigator.pop(context);
                           },
-                          child: const Text('Apply'),
                           style: FilledButton.styleFrom(
                             backgroundColor: _primaryColor,
                             minimumSize: const Size(0, 50),
                           ),
+                          child: const Text('Apply'),
                         ),
                       ),
                     ],

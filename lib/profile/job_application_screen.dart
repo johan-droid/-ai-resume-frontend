@@ -181,8 +181,9 @@ class _JobApplicationScreenState extends State<JobApplicationScreen> {
                 keyboardType: TextInputType.emailAddress,
                 validator: (v) {
                   if (v!.isEmpty) return 'Please enter your email';
-                  if (!RegExp(r'\S+@\S+\.\S+').hasMatch(v))
+                  if (!RegExp(r'\S+@\S+\.\S+').hasMatch(v)) {
                     return 'Enter a valid email';
+                  }
                   return null;
                 },
               ),

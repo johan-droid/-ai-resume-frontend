@@ -191,7 +191,7 @@ class ResumeDetailScreen extends StatelessWidget {
                               ]),
                         ),
                       );
-                    })).toList(),
+                    })),
                   ],
 
                   // Achievements (Only for Candidate object)

@@ -99,7 +99,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             children: [
               // --- Job Role Dropdown ---
               DropdownButtonFormField<String>(
-                value: _selectedRole,
+                initialValue: _selectedRole,
                 hint: const Text('Select Job Role'),
                 decoration: _buildInputDecoration(
                     'Job Role *', Icons.work_outline_rounded),

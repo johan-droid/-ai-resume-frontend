@@ -356,7 +356,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
               
               // --- Education & Certs (Split to new page if needed) ---
               pw.Wrap(

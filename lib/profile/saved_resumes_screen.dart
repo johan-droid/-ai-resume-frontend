@@ -289,7 +289,7 @@ class SavedResumesScreen extends StatelessWidget {
                       ],
                     ),
                   );
-                }).toList(),
+                }),
               ],
 
               // --- Education ---
