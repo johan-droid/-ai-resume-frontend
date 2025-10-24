@@ -255,7 +255,8 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
         _resumeDetails['phone'] ?? _fullDriverResumeData['contact']['phone'];
     final String location =
         _resumeDetails['city'] ?? _fullDriverResumeData['contact']['location'];
-    final String email = _fullDriverResumeData['contact']['email']; // From dummy
+    final String email =
+        _fullDriverResumeData['contact']['email']; // From dummy
     final String license = _fullDriverResumeData['license']; // From dummy
     final String summary = _fullDriverResumeData['summary']; // From dummy
     final List skills = _fullDriverResumeData['skills']; // From dummy
@@ -282,7 +283,8 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
                 padding: const pw.EdgeInsets.only(top: 4.0, bottom: 8.0),
                 child: pw.Text(
                   jobTitle,
-                  style: const pw.TextStyle(fontSize: 16, color: PdfColors.grey),
+                  style:
+                      const pw.TextStyle(fontSize: 16, color: PdfColors.grey),
                 ),
               ),
 
@@ -357,45 +359,41 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
                   ),
                 );
               }),
-              
+
               // --- Education & Certs (Split to new page if needed) ---
-              pw.Wrap(
-                children: [
-                   pw.Container(
+              pw.Wrap(children: [
+                pw.Container(
                     width: 240, // Half page width
                     child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                         pw.SizedBox(height: 12),
-                        _buildPdfSection('Education', myTheme),
-                        pw.Text(
-                          education['degree']?.toString() ?? '',
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                        ),
-                        pw.Text(education['institution']?.toString() ?? ''),
-                        if ((education['year'] ?? '').toString().isNotEmpty)
-                          pw.Text('Year: ${education['year']}'),
-                      ]
-                    )
-                  ),
-                   pw.Container(
-                    width: 240, // Half page width
-                    child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                         pw.SizedBox(height: 12),
-                        _buildPdfSection('Certifications & Licenses', myTheme),
-                        ...certifications.map(
-                          (l) => pw.Padding(
-                            padding: const pw.EdgeInsets.symmetric(vertical: 2.0),
-                            child: pw.Text('• ${l.toString()}'),
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.SizedBox(height: 12),
+                          _buildPdfSection('Education', myTheme),
+                          pw.Text(
+                            education['degree']?.toString() ?? '',
+                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                           ),
-                        ),
-                      ]
-                    )
-                  ),
-                ]
-              )
+                          pw.Text(education['institution']?.toString() ?? ''),
+                          if ((education['year'] ?? '').toString().isNotEmpty)
+                            pw.Text('Year: ${education['year']}'),
+                        ])),
+                pw.Container(
+                    width: 240, // Half page width
+                    child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.SizedBox(height: 12),
+                          _buildPdfSection(
+                              'Certifications & Licenses', myTheme),
+                          ...certifications.map(
+                            (l) => pw.Padding(
+                              padding:
+                                  const pw.EdgeInsets.symmetric(vertical: 2.0),
+                              child: pw.Text('• ${l.toString()}'),
+                            ),
+                          ),
+                        ])),
+              ])
             ],
           );
         },

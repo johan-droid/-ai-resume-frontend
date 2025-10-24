@@ -151,8 +151,7 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                       children: [
                         DropdownButtonFormField<String>(
                           initialValue: tempProfile,
-                          decoration:
-                              _buildInputDecoration('Job Role', null),
+                          decoration: _buildInputDecoration('Job Role', null),
                           items: _jobProfileOptions.map((String value) {
                             return DropdownMenuItem<String>(
                                 value: value, child: Text(value));
@@ -410,8 +409,8 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                       .map((skill) => Chip(
                             label: Text(skill),
                             backgroundColor: _backgroundColor,
-                            labelStyle: TextStyle(
-                                fontSize: 12, color: _primaryColor),
+                            labelStyle:
+                                TextStyle(fontSize: 12, color: _primaryColor),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 4, vertical: 0),
                             materialTapTargetSize:
