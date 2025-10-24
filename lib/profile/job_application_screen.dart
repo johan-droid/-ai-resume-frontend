@@ -135,7 +135,8 @@ class _JobApplicationScreenState extends State<JobApplicationScreen> {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          Icon(Icons.business, size: 16, color: Colors.grey[700]),
+                          Icon(Icons.business,
+                              size: 16, color: Colors.grey[700]),
                           const SizedBox(width: 8),
                           Text(
                             widget.job.companyName,
@@ -205,9 +206,7 @@ class _JobApplicationScreenState extends State<JobApplicationScreen> {
               const SizedBox(height: 8),
               OutlinedButton.icon(
                 icon: Icon(
-                  _fileName != null
-                      ? Icons.check_circle
-                      : Icons.attach_file,
+                  _fileName != null ? Icons.check_circle : Icons.attach_file,
                   color: _fileName != null ? Colors.green : Colors.grey[700],
                 ),
                 label: Flexible(
@@ -215,16 +214,16 @@ class _JobApplicationScreenState extends State<JobApplicationScreen> {
                     _fileName ?? "Choose File (.pdf, .doc)",
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: _fileName != null ? Colors.green : Colors.grey[700],
+                      color:
+                          _fileName != null ? Colors.green : Colors.grey[700],
                     ),
                   ),
                 ),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
                   side: BorderSide(
-                    color: _fileName != null
-                        ? Colors.green
-                        : Colors.grey.shade400,
+                    color:
+                        _fileName != null ? Colors.green : Colors.grey.shade400,
                   ),
                 ),
                 onPressed: _pickFile,

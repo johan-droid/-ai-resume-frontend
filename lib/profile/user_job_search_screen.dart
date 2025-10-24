@@ -76,8 +76,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
 
     // Job Profile
     if (_selectedJobProfile != 'Any') {
-      tempJobs =
-          tempJobs.where((j) => j.role == _selectedJobProfile).toList();
+      tempJobs = tempJobs.where((j) => j.role == _selectedJobProfile).toList();
     }
 
     // Location
@@ -108,13 +107,12 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
     // Experience
     if (_selectedExperience != 'Any') {
       if (_selectedExperience == '0-2 years') {
-        tempJobs =
-            tempJobs.where((j) => j.experienceRequired <= 2).toList();
+        tempJobs = tempJobs.where((j) => j.experienceRequired <= 2).toList();
       }
       if (_selectedExperience == '3-5 years') {
         tempJobs = tempJobs
-            .where((j) =>
-                j.experienceRequired >= 3 && j.experienceRequired <= 5)
+            .where(
+                (j) => j.experienceRequired >= 3 && j.experienceRequired <= 5)
             .toList();
       }
       if (_selectedExperience == '6+ years') {
@@ -169,8 +167,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
                         // Job Role
                         DropdownButtonFormField<String>(
                           initialValue: tempProfile,
-                          decoration:
-                              _buildInputDecoration('Job Role', null),
+                          decoration: _buildInputDecoration('Job Role', null),
                           items: _jobProfileOptions.map((String value) {
                             return DropdownMenuItem<String>(
                                 value: value, child: Text(value));
@@ -183,8 +180,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
                         // Location
                         DropdownButtonFormField<String>(
                           initialValue: tempLocation,
-                          decoration:
-                              _buildInputDecoration('Location', null),
+                          decoration: _buildInputDecoration('Location', null),
                           items: _locationOptions.map((String value) {
                             return DropdownMenuItem<String>(
                                 value: value, child: Text(value));
@@ -414,8 +410,8 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
               _buildInfoChip(
                   Icons.location_on_outlined, job.location, Colors.grey[600]!),
               if (job.isWorkFromHome)
-                _buildInfoChip(
-                    Icons.home_work_outlined, 'Work from home', Colors.grey[600]!),
+                _buildInfoChip(Icons.home_work_outlined, 'Work from home',
+                    Colors.grey[600]!),
               _buildInfoChip(
                   Icons.currency_rupee_rounded,
                   '₹${_numberFormat.format(job.salaryMin)} - ₹${_numberFormat.format(job.salaryMax)} /year',
@@ -458,8 +454,9 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
   }
 
   // --- *** THIS IS THE FIX *** ---
-  Widget _buildTagChip(String text, MaterialColor color) { // <-- FIX: Changed Color to MaterialColor
-  // --- *** END OF FIX *** ---
+  Widget _buildTagChip(String text, MaterialColor color) {
+    // <-- FIX: Changed Color to MaterialColor
+    // --- *** END OF FIX *** ---
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -468,8 +465,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
       ),
       child: Text(
         text,
-        style:
-            TextStyle(color: color.shade700, fontWeight: FontWeight.w500),
+        style: TextStyle(color: color.shade700, fontWeight: FontWeight.w500),
       ),
     );
   }

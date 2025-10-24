@@ -70,7 +70,8 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
         onPressed: () {
           // Validate form if on card tab
-          if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+          if (_formKey.currentState != null &&
+              _formKey.currentState!.validate()) {
             // All fields are valid, proceed to OTP verification
             Navigator.push(
               context,
@@ -131,7 +132,8 @@ class _PaymentPageState extends State<PaymentPage> {
               ],
             ),
             child: QrImageView(
-              data: 'upi://pay?pa=your-merchant-id@upi&pn=Your-Business-Name&am=${widget.plan.price.replaceAll('₹', '')}&cu=INR',
+              data:
+                  'upi://pay?pa=your-merchant-id@upi&pn=Your-Business-Name&am=${widget.plan.price.replaceAll('₹', '')}&cu=INR',
               version: QrVersions.auto,
               size: 250.0,
               backgroundColor: Colors.white,
@@ -223,7 +225,9 @@ class _PaymentPageState extends State<PaymentPage> {
                     ExpiryDateInputFormatter(),
                   ],
                   validator: (value) {
-                    if (value == null || !RegExp(r'^(0[1-9]|1[0-2])\/?([0-9]{2})$').hasMatch(value)) {
+                    if (value == null ||
+                        !RegExp(r'^(0[1-9]|1[0-2])\/?([0-9]{2})$')
+                            .hasMatch(value)) {
                       return 'MM/YY';
                     }
                     final parts = value.split('/');
@@ -231,7 +235,11 @@ class _PaymentPageState extends State<PaymentPage> {
                     final month = int.tryParse(parts[0]);
                     final year = int.tryParse(parts[1]);
                     final currentYearLastTwo = DateTime.now().year % 100;
-                    if (month == null || year == null || month < 1 || month > 12 || year < currentYearLastTwo) {
+                    if (month == null ||
+                        year == null ||
+                        month < 1 ||
+                        month > 12 ||
+                        year < currentYearLastTwo) {
                       return 'Invalid';
                     }
                     return null;
@@ -287,7 +295,8 @@ class _PaymentPageState extends State<PaymentPage> {
 // Custom formatter for Card Number (adds space every 4 digits)
 class CardNumberInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     var text = newValue.text.replaceAll(' ', ''); // Remove existing spaces
     if (text.length > 16) text = text.substring(0, 16); // Max 16 digits
 
@@ -310,14 +319,16 @@ class CardNumberInputFormatter extends TextInputFormatter {
 // Custom formatter for Expiry Date (adds '/' after 2 digits)
 class ExpiryDateInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     var text = newValue.text.replaceAll('/', ''); // Remove existing slash
     if (text.length > 4) text = text.substring(0, 4); // Max 4 digits (MMYY)
 
     var buffer = StringBuffer();
     for (int i = 0; i < text.length; i++) {
       buffer.write(text[i]);
-      if (i == 1 && text.length > 2) { // Add slash after MM if YY is started
+      if (i == 1 && text.length > 2) {
+        // Add slash after MM if YY is started
         buffer.write('/');
       }
     }

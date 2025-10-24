@@ -43,7 +43,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       Future.delayed(const Duration(seconds: 4), () {
         ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       });
-
     } else {
       // Show an error message if OTP is wrong
       ScaffoldMessenger.of(context).showSnackBar(
@@ -89,7 +88,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 32),
-              
+
               // The Pinput widget
               Pinput(
                 controller: pinController,
