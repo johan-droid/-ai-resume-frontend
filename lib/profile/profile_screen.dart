@@ -6,7 +6,6 @@ import 'package:rezume_app/profile/help_center_screen.dart';
 import 'package:rezume_app/profile/edit_profile_screen.dart';
 import 'package:rezume_app/profile/saved_resumes_screen.dart';
 import 'package:rezume_app/profile/org_edit_profile_screen.dart';
-import 'package:rezume_app/profile/company_list_screen.dart';
 // --- IMPORT THE NEWLY CREATED LIST SCREEN ---
 import 'package:rezume_app/profile/posted_jobs_screen.dart';
 // --- (The import for CreateJobScreen is no longer needed here) ---
@@ -38,25 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _profileContact = '';
   String _profileAvatarText = '';
   String _profileEmail = '';
-
-  // This list is not actively used by the builder logic below
-  final List<Map<String, dynamic>> _menuItems = [
-    {
-      'title': 'My Saved Resumes',
-      'icon': Icons.description_outlined,
-      'route': const SavedResumesScreen(),
-    },
-    {
-      'title': 'Apply to Companies', // New menu item
-      'icon': Icons.business_center_outlined,
-      'route': const CompanyListScreen(),
-    },
-    {
-      'title': 'Help Center',
-      'icon': Icons.help_outline_rounded,
-      'route': const HelpCenterScreen(),
-    },
-  ];
 
   @override
   void initState() {
@@ -211,8 +191,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              PostedJobsScreen(themeColor: _currentPrimaryColor),
+                          builder: (context) => PostedJobsScreen(
+                              themeColor: _currentPrimaryColor),
                         ),
                       );
                       // --- END OF MODIFICATION ---
@@ -264,7 +244,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required Color color,
     bool isLogout = false,
   }) {
-    final Color bgColor = isLogout ? Colors.red.shade50 : color.withOpacity(0.1);
+    final Color bgColor =
+        isLogout ? Colors.red.shade50 : color.withOpacity(0.1);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),

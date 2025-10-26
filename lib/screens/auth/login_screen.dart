@@ -16,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   String _selectedRole = 'User';
-  bool _obscurePassword = true;
 
   late AnimationController _fadeController;
   late AnimationController _slideController;
@@ -219,82 +218,8 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    required String? Function(String?) validator,
-    TextInputType? keyboardType,
-    bool isPassword = false,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: _currentPrimaryColor.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: keyboardType,
-        obscureText: isPassword ? _obscurePassword : false,
-        style: const TextStyle(fontSize: 16),
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: TextStyle(color: Colors.grey.shade600),
-          prefixIcon: Icon(icon, color: _currentPrimaryColor),
-          suffixIcon: isPassword
-              ? IconButton(
-                  icon: Icon(
-                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.grey.shade600,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
-                  },
-                )
-              : null,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: _currentPrimaryColor, width: 2),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Colors.red, width: 2),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: Colors.red, width: 2),
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        ),
-        validator: validator,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -428,11 +353,15 @@ class _LoginScreenState extends State<LoginScreen>
                                   decoration: InputDecoration(
                                     labelText: 'Phone number',
                                     prefixIcon: Icon(Icons.phone_outlined),
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
                                   ),
                                   keyboardType: TextInputType.phone,
                                   validator: (value) {
-                                    if (_selectedRole == 'User' && (value == null || value.trim().length < 10)) {
+                                    if (_selectedRole == 'User' &&
+                                        (value == null ||
+                                            value.trim().length < 10)) {
                                       return 'Please enter a valid 10-digit number';
                                     }
                                     return null;
@@ -449,13 +378,18 @@ class _LoginScreenState extends State<LoginScreen>
                                   decoration: InputDecoration(
                                     labelText: "Organization's Email",
                                     prefixIcon: Icon(Icons.email_outlined),
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
                                   ),
                                   keyboardType: TextInputType.emailAddress,
                                   validator: (value) {
                                     if (_selectedRole == 'Organization') {
-                                       if (value == null || value.trim().isEmpty) return 'Please enter email';
-                                       if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) return 'Enter valid email';
+                                      if (value == null || value.trim().isEmpty)
+                                        return 'Please enter email';
+                                      if (!RegExp(r'\S+@\S+\.\S+')
+                                          .hasMatch(value))
+                                        return 'Enter valid email';
                                     }
                                     return null;
                                   },
@@ -470,11 +404,13 @@ class _LoginScreenState extends State<LoginScreen>
                                 decoration: InputDecoration(
                                   labelText: 'Password',
                                   prefixIcon: Icon(Icons.lock_outline_rounded),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12)),
                                 ),
                                 obscureText: true, // Keep obscureText
                                 validator: (value) {
-                                  if (value == null || value.trim().length < 6) {
+                                  if (value == null ||
+                                      value.trim().length < 6) {
                                     return 'Password must be at least 6 characters';
                                   }
                                   return null;

@@ -1,7 +1,6 @@
 // lib/screens/auth/registration_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package:rezume_app/screens/auth/login_screen.dart';
 import 'package:rezume_app/screens/onboarding/experience_level_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -48,7 +47,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     double strength = 0;
     String text = 'Weak';
     Color color = Colors.red;
-  
+
     if (password.isEmpty) {
       strength = 0;
       text = '';
@@ -61,9 +60,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       strength = 0.25;
       if (RegExp(r'[A-Z]').hasMatch(password)) strength += 0.25;
       if (RegExp(r'[0-9]').hasMatch(password)) strength += 0.25;
-      if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) strength += 0.25;
+      if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password))
+        strength += 0.25;
     }
-  
+
     if (strength >= 1.0) {
       text = 'Very Strong';
       color = Colors.green;
@@ -74,7 +74,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       text = 'Medium';
       color = Colors.orange;
     }
-  
+
     setState(() {
       _passwordStrength = strength;
       _strengthText = text;
@@ -92,7 +92,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return;
       }
       print('Registration successful!');
-      
+
       // Navigate to onboarding flow for User registration
       Navigator.pushReplacement(
         context,
@@ -106,16 +106,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       );
     }
   }
-  
+
   // --- Label helper with red star ---
   Widget _buildMandatoryLabel(String title) {
     return RichText(
       text: TextSpan(
         text: title,
         style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey[700]),
+            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey[700]),
         children: const <TextSpan>[
           TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
         ],
@@ -129,11 +127,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     return Scaffold(
       // This setup fixes the back button and status bar color
-      extendBodyBehindAppBar: true, 
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent, 
-        elevation: 0, 
-        iconTheme: const IconThemeData(color: Colors.white), 
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Stack(
         children: [
@@ -177,15 +175,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ],
           ),
-          
+
           // --- LAYER 2: THE SCROLLABLE FORM CARD ---
           SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(
-                top: screenHeight * 0.28, // 28% from the top
-                left: 24, 
-                right: 24
-              ),
+                  top: screenHeight * 0.28, // 28% from the top
+                  left: 24,
+                  right: 24),
               child: Card(
                 elevation: 8,
                 shadowColor: Colors.black.withOpacity(0.1),
@@ -206,12 +203,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           controller: _nameController,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.person_outline),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
-                          validator: (v) => v!.isEmpty ? 'Name cannot be empty' : null,
+                          validator: (v) =>
+                              v!.isEmpty ? 'Name cannot be empty' : null,
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // -- Phone Number --
                         _buildMandatoryLabel('Phone number'),
                         const SizedBox(height: 8),
@@ -220,14 +219,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.phone_outlined),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
-                          validator: (v) => v!.length < 10 ? 'Enter a valid number' : null,
+                          validator: (v) =>
+                              v!.length < 10 ? 'Enter a valid number' : null,
                         ),
                         const SizedBox(height: 16),
 
-
-                        
                         // -- Set Password --
                         _buildMandatoryLabel('Set Password'),
                         const SizedBox(height: 8),
@@ -236,11 +235,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           obscureText: true,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline_rounded),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
-                          validator: (v) => v!.length < 6 ? 'Password is too short' : null,
+                          validator: (v) =>
+                              v!.length < 6 ? 'Password is too short' : null,
                         ),
-                        
+
                         // -- Password Strength Bar --
                         if (_passwordController.text.isNotEmpty)
                           Padding(
@@ -255,12 +256,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   minHeight: 6,
                                 ),
                                 const SizedBox(height: 4),
-                                Text(_strengthText, style: TextStyle(color: _strengthColor, fontWeight: FontWeight.bold)),
+                                Text(_strengthText,
+                                    style: TextStyle(
+                                        color: _strengthColor,
+                                        fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
                         const SizedBox(height: 16),
-                        
+
                         // -- Confirm Password --
                         _buildMandatoryLabel('Confirm Password'),
                         const SizedBox(height: 8),
@@ -269,12 +273,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           obscureText: true,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline_rounded),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
-                          validator: (v) => v != _passwordController.text ? 'Passwords do not match' : null,
+                          validator: (v) => v != _passwordController.text
+                              ? 'Passwords do not match'
+                              : null,
                         ),
                         const SizedBox(height: 24),
-                        
+
                         // -- Gender --
                         _buildMandatoryLabel('Gender'),
                         const SizedBox(height: 16),
@@ -285,24 +292,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               iconPath: 'assets/images/male_avatar.png',
                               label: 'Male',
                               isSelected: _selectedGender == 'Male',
-                              onTap: () => setState(() => _selectedGender = 'Male'),
+                              onTap: () =>
+                                  setState(() => _selectedGender = 'Male'),
                             ),
                             _buildGenderOption(
                               iconPath: 'assets/images/female_avatar.png',
                               label: 'Female',
                               isSelected: _selectedGender == 'Female',
-                              onTap: () => setState(() => _selectedGender = 'Female'),
+                              onTap: () =>
+                                  setState(() => _selectedGender = 'Female'),
                             ),
                             _buildGenderOption(
                               iconPath: 'assets/images/other_avatar.png',
                               label: 'Other',
                               isSelected: _selectedGender == 'Other',
-                              onTap: () => setState(() => _selectedGender = 'Other'),
+                              onTap: () =>
+                                  setState(() => _selectedGender = 'Other'),
                             ),
                           ],
                         ),
                         const SizedBox(height: 30),
-                        
+
                         // -- SUBMIT Button --
                         ElevatedButton(
                           onPressed: _register,
@@ -310,13 +320,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             backgroundColor: const Color(0xFF007BFF),
                             foregroundColor: Colors.white,
                             minimumSize: const Size(double.infinity, 50),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                            textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                            textStyle: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           child: const Text('SUBMIT'),
                         ),
                         const SizedBox(height: 16),
-                        const Center(child: Text('* Mandatory', style: TextStyle(color: Colors.red))),
+                        const Center(
+                            child: Text('* Mandatory',
+                                style: TextStyle(color: Colors.red))),
                       ],
                     ),
                   ),
@@ -346,11 +360,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (iconPath != null) {
       iconWidget = Image.asset(iconPath, width: 45, height: 45);
     } else if (iconData != null) {
-      iconWidget = Icon(iconData, size: 45, color: isSelected ? selectedColor : unselectedTextColor);
+      iconWidget = Icon(iconData,
+          size: 45, color: isSelected ? selectedColor : unselectedTextColor);
     } else {
       iconWidget = const SizedBox(width: 45, height: 45);
     }
-    
+
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -361,7 +376,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             child: iconWidget,
           ),
           const SizedBox(height: 8),
-          Text(label, style: TextStyle(fontSize: 16, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal, color: isSelected ? selectedColor : unselectedTextColor)),
+          Text(label,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: isSelected ? selectedColor : unselectedTextColor)),
         ],
       ),
     );

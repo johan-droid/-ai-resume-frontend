@@ -181,7 +181,6 @@ class SavedResumesScreen extends StatelessWidget {
     final experience = data['experience'] as List? ?? [];
     final skills = data['skills'] as List? ?? [];
     final certifications = data['certifications'] as List? ?? [];
-    final languages = data['languages'] as List? ?? [];
 
     pdf.addPage(
       pw.Page(
