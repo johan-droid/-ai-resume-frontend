@@ -421,49 +421,60 @@ class _LoginScreenState extends State<LoginScreen>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
+                              // --- CONDITIONALLY SHOW PHONE FIELD ---
                               if (_selectedRole == 'User') ...[
-                                _buildTextField(
+                                TextFormField(
                                   controller: _phoneController,
-                                  label: 'Phone number',
-                                  icon: Icons.phone_outlined,
+                                  decoration: InputDecoration(
+                                    labelText: 'Phone number',
+                                    prefixIcon: Icon(Icons.phone_outlined),
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  ),
                                   keyboardType: TextInputType.phone,
                                   validator: (value) {
-                                    if (value == null ||
-                                        value.trim().length < 10) {
+                                    if (_selectedRole == 'User' && (value == null || value.trim().length < 10)) {
                                       return 'Please enter a valid 10-digit number';
                                     }
                                     return null;
                                   },
                                 ),
-                                const SizedBox(height: 20),
+                                SizedBox(height: 16), // Spacing after phone
                               ],
-                              _buildTextField(
-                                controller: _emailController,
-                                label: _selectedRole == 'User'
-                                    ? 'Email address'
-                                    : "Organization's Email",
-                                icon: Icons.email_outlined,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Please enter your email address';
-                                  }
-                                  if (!RegExp(r'\S+@\S+\.\S+')
-                                      .hasMatch(value)) {
-                                    return 'Please enter a valid email address';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 20),
-                              _buildTextField(
+                              // --- END PHONE FIELD ---
+
+                              // --- CONDITIONALLY SHOW EMAIL FIELD ---
+                              if (_selectedRole == 'Organization') ...[
+                                TextFormField(
+                                  controller: _emailController,
+                                  decoration: InputDecoration(
+                                    labelText: "Organization's Email",
+                                    prefixIcon: Icon(Icons.email_outlined),
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  ),
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: (value) {
+                                    if (_selectedRole == 'Organization') {
+                                       if (value == null || value.trim().isEmpty) return 'Please enter email';
+                                       if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) return 'Enter valid email';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                SizedBox(height: 16), // Spacing after email
+                              ],
+                              // --- END EMAIL FIELD ---
+
+                              // --- Password Field (Always Visible) ---
+                              TextFormField(
                                 controller: _passwordController,
-                                label: 'Password',
-                                icon: Icons.lock_outline_rounded,
-                                isPassword: true,
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  prefixIcon: Icon(Icons.lock_outline_rounded),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                                obscureText: true, // Keep obscureText
                                 validator: (value) {
-                                  if (value == null ||
-                                      value.trim().length < 6) {
+                                  if (value == null || value.trim().length < 6) {
                                     return 'Password must be at least 6 characters';
                                   }
                                   return null;
