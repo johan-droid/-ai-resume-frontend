@@ -96,12 +96,12 @@ class _VoiceResumeBuilderScreenState extends State<VoiceResumeBuilderScreen>
       TextEditingController(text: _fullDriverResumeData['fullName']);
   final _jobTitleController =
       TextEditingController(text: _fullDriverResumeData['jobTitle']);
-  final _phoneController = TextEditingController(
-      text: _fullDriverResumeData['contact']['phone']);
-  final _emailController = TextEditingController(
-      text: _fullDriverResumeData['contact']['email']);
-  final _locationController = TextEditingController(
-      text: _fullDriverResumeData['contact']['location']);
+  final _phoneController =
+      TextEditingController(text: _fullDriverResumeData['contact']['phone']);
+  final _emailController =
+      TextEditingController(text: _fullDriverResumeData['contact']['email']);
+  final _locationController =
+      TextEditingController(text: _fullDriverResumeData['contact']['location']);
   final _summaryController =
       TextEditingController(text: _fullDriverResumeData['summary']);
   final _skillsController = TextEditingController(
@@ -204,8 +204,9 @@ class _VoiceResumeBuilderScreenState extends State<VoiceResumeBuilderScreen>
     final String email = _emailController.text;
     final String location = _locationController.text;
     final String summary = _summaryController.text;
-    final List skills = _skillsController.text.split(',').map((s) => s.trim()).toList();
-    
+    final List skills =
+        _skillsController.text.split(',').map((s) => s.trim()).toList();
+
     // Use dummy data for sections not in the form
     final String license = _fullDriverResumeData['license'];
     final List experience = _fullDriverResumeData['experience'];
@@ -229,7 +230,8 @@ class _VoiceResumeBuilderScreenState extends State<VoiceResumeBuilderScreen>
                 padding: const pw.EdgeInsets.only(top: 4.0, bottom: 8.0),
                 child: pw.Text(
                   jobTitle,
-                  style: const pw.TextStyle(fontSize: 16, color: PdfColors.grey),
+                  style:
+                      const pw.TextStyle(fontSize: 16, color: PdfColors.grey),
                 ),
               ),
               pw.Row(
@@ -295,44 +297,40 @@ class _VoiceResumeBuilderScreenState extends State<VoiceResumeBuilderScreen>
                     ],
                   ),
                 );
-              }).toList(),
-              pw.Wrap(
-                children: [
-                   pw.Container(
+              }),
+              pw.Wrap(children: [
+                pw.Container(
                     width: 240,
                     child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                         pw.SizedBox(height: 12),
-                        _buildPdfSection('Education', myTheme),
-                        pw.Text(
-                          education['degree']?.toString() ?? '',
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                        ),
-                        pw.Text(education['institution']?.toString() ?? ''),
-                        if ((education['year'] ?? '').toString().isNotEmpty)
-                          pw.Text('Year: ${education['year']}'),
-                      ]
-                    )
-                  ),
-                   pw.Container(
-                    width: 240,
-                    child: pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                         pw.SizedBox(height: 12),
-                        _buildPdfSection('Certifications & Licenses', myTheme),
-                        ...certifications.map(
-                          (l) => pw.Padding(
-                            padding: const pw.EdgeInsets.symmetric(vertical: 2.0),
-                            child: pw.Text('• ${l.toString()}'),
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.SizedBox(height: 12),
+                          _buildPdfSection('Education', myTheme),
+                          pw.Text(
+                            education['degree']?.toString() ?? '',
+                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                           ),
-                        ),
-                      ]
-                    )
-                  ),
-                ]
-              )
+                          pw.Text(education['institution']?.toString() ?? ''),
+                          if ((education['year'] ?? '').toString().isNotEmpty)
+                            pw.Text('Year: ${education['year']}'),
+                        ])),
+                pw.Container(
+                    width: 240,
+                    child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.SizedBox(height: 12),
+                          _buildPdfSection(
+                              'Certifications & Licenses', myTheme),
+                          ...certifications.map(
+                            (l) => pw.Padding(
+                              padding:
+                                  const pw.EdgeInsets.symmetric(vertical: 2.0),
+                              child: pw.Text('• ${l.toString()}'),
+                            ),
+                          ),
+                        ])),
+              ])
             ],
           );
         },
@@ -504,19 +502,23 @@ class _VoiceResumeBuilderScreenState extends State<VoiceResumeBuilderScreen>
             const SizedBox(height: 16),
             TextFormField(
               controller: _summaryController,
-              decoration: _buildInputDecoration('Summary', Icons.article, alignLabel: true),
+              decoration: _buildInputDecoration('Summary', Icons.article,
+                  alignLabel: true),
               maxLines: 5,
             ),
             const SizedBox(height: 16),
             TextFormField(
               controller: _skillsController,
-              decoration: _buildInputDecoration('Skills (comma-separated)', Icons.star, alignLabel: true),
+              decoration: _buildInputDecoration(
+                  'Skills (comma-separated)', Icons.star,
+                  alignLabel: true),
               maxLines: 3,
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
               icon: const Icon(Icons.picture_as_pdf, color: Colors.white),
-              label: const Text('Generate Updated PDF', style: TextStyle(color: Colors.white)),
+              label: const Text('Generate Updated PDF',
+                  style: TextStyle(color: Colors.white)),
               onPressed: _generateFullPdf,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF007BFF),
@@ -536,7 +538,8 @@ class _VoiceResumeBuilderScreenState extends State<VoiceResumeBuilderScreen>
     );
   }
 
-  InputDecoration _buildInputDecoration(String label, IconData icon, {bool alignLabel = false}) {
+  InputDecoration _buildInputDecoration(String label, IconData icon,
+      {bool alignLabel = false}) {
     return InputDecoration(
       labelText: label,
       prefixIcon: Icon(icon),
@@ -554,10 +557,10 @@ class ProgressIndicatorBar extends StatelessWidget {
   final int currentStep;
 
   const ProgressIndicatorBar({
-    Key? key,
+    super.key,
     required this.steps,
     required this.currentStep,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

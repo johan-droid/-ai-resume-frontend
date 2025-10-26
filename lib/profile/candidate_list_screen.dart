@@ -150,9 +150,8 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                     child: ListView(
                       children: [
                         DropdownButtonFormField<String>(
-                          value: tempProfile,
-                          decoration:
-                              _buildInputDecoration('Job Role', null),
+                          initialValue: tempProfile,
+                          decoration: _buildInputDecoration('Job Role', null),
                           items: _jobProfileOptions.map((String value) {
                             return DropdownMenuItem<String>(
                                 value: value, child: Text(value));
@@ -182,7 +181,7 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<String>(
-                          value: tempSalary,
+                          initialValue: tempSalary,
                           decoration: _buildInputDecoration(
                               'Annual salary (in lakhs)', null),
                           items: _salaryOptions.map((String value) {
@@ -195,7 +194,7 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<String>(
-                          value: tempExperience,
+                          initialValue: tempExperience,
                           decoration: _buildInputDecoration(
                               'Years of experience', null),
                           items: _experienceOptions.map((String value) {
@@ -233,10 +232,10 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                             _filterCandidates();
                             Navigator.pop(context);
                           },
-                          child: const Text('Clear All'),
                           style: OutlinedButton.styleFrom(
                             minimumSize: const Size(0, 50),
                           ),
+                          child: const Text('Clear All'),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -254,11 +253,11 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                             _filterCandidates(); // Re-run filter
                             Navigator.pop(context);
                           },
-                          child: const Text('Apply'),
                           style: FilledButton.styleFrom(
                             backgroundColor: _primaryColor,
                             minimumSize: const Size(0, 50),
                           ),
+                          child: const Text('Apply'),
                         ),
                       ),
                     ],
@@ -410,8 +409,8 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
                       .map((skill) => Chip(
                             label: Text(skill),
                             backgroundColor: _backgroundColor,
-                            labelStyle: TextStyle(
-                                fontSize: 12, color: _primaryColor),
+                            labelStyle:
+                                TextStyle(fontSize: 12, color: _primaryColor),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 4, vertical: 0),
                             materialTapTargetSize:

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:rezume_app/screens/auth/login_screen.dart';
+import 'package:rezume_app/screens/onboarding/experience_level_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -15,9 +16,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  // --- ADD THIS CONTROLLER ---
-  final _emailController = TextEditingController();
-  // --- END OF ADDITION ---
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   String _selectedGender = '';
@@ -40,9 +38,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
-    // --- ADD THIS DISPOSE ---
-    _emailController.dispose();
-    // --- END OF ADDITION ---
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -87,7 +82,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     });
   }
 
-  // --- Registration logic (navigates to Login page) ---
+  // --- Registration logic (navigates to onboarding for Users) ---
   void _register() {
     if (_formKey.currentState!.validate()) {
       if (_selectedGender.isEmpty) {
@@ -97,12 +92,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return;
       }
       print('Registration successful!');
-      Navigator.pushAndRemoveUntil(
+      
+      // Navigate to onboarding flow for User registration
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const LoginScreen(registrationSuccessful: true),
+          builder: (context) => const ExperienceLevelScreen(),
         ),
-        (Route<dynamic> route) => false,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -230,31 +226,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         const SizedBox(height: 16),
 
-                        // --- ADD THIS EMAIL FIELD ---
-                        _buildMandatoryLabel('Email address'),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.email_outlined),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Please enter your email address';
-                            }
-                            // Basic email format check
-                            if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                              return 'Please enter a valid email address';
-                            }
-                            return null; // Return null if valid
-                          },
-                        ),
-                        // --- END OF ADDITION ---
-                        const SizedBox(height: 16),
+
                         
                         // -- Set Password --
                         _buildMandatoryLabel('Set Password'),

@@ -136,7 +136,7 @@ final List<Candidate> dummyCandidates = List.generate(100, (index) {
 
   return Candidate(
     id: index + 1,
-    name: '${names[index % names.length]}',
+    name: names[index % names.length],
     jobProfile: job,
     location: locations[index % locations.length],
     experience: (index % 10) + 1, // 1 to 10 years experience

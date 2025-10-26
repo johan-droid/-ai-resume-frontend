@@ -12,11 +12,11 @@ class ResumeDetailScreen extends StatelessWidget {
 
   Map<String, dynamic> _toMap(dynamic src) {
     if (src is Map<String, dynamic>) return src;
-    
+
     // fall back to dynamic-field access for Candidate object
     // We know 'src' is a 'Candidate' object, so we cast it to dynamic
     final dynamic s = src;
-    
+
     return {
       'title': s.jobProfile ?? '',
       // 'subtitle': s.subtitle ?? '', // This was the original error
@@ -30,14 +30,16 @@ class ResumeDetailScreen extends StatelessWidget {
       },
       'experience': s.experience != null
           // --- FIX: Made text clearer ---
-          ? [{'position': '${s.experience} years total experience'}] 
+          ? [
+              {'position': '${s.experience} years total experience'}
+            ]
           : [],
       'skills': s.skills ?? [], // This field exists
-      
+
       // --- FIX: 'licenses' and 'languages' do not exist on the Candidate object. ---
       'licenses': [], // Provide an empty list fallback
       'languages': [], // Provide an empty list fallback
-      
+
       'achievements': s.achievements ?? [], // This field exists
       'qualification': s.qualification ?? '', // This field exists
     };
@@ -173,25 +175,24 @@ class ResumeDetailScreen extends StatelessWidget {
                                 if ((e['details'] ?? []).isNotEmpty)
                                   const SizedBox(height: 8),
                                 if ((e['details'] ?? []).isNotEmpty)
-                                  ...((e['details'] as List)
-                                      .map((d) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text('• ',
-                                                      style: TextStyle(
-                                                          fontSize: 16)),
-                                                  Expanded(
-                                                      child: Text(d.toString())),
-                                                ]),
-                                          ))),
+                                  ...((e['details'] as List).map((d) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4.0),
+                                        child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Text('• ',
+                                                  style:
+                                                      TextStyle(fontSize: 16)),
+                                              Expanded(
+                                                  child: Text(d.toString())),
+                                            ]),
+                                      ))),
                               ]),
                         ),
                       );
-                    })).toList(),
+                    })),
                   ],
 
                   // Achievements (Only for Candidate object)

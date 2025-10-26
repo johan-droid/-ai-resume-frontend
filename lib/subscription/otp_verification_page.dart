@@ -4,7 +4,7 @@ import 'subscription_page.dart'; // To get the SubscriptionPlan model
 
 class OtpVerificationPage extends StatefulWidget {
   final SubscriptionPlan plan;
-  const OtpVerificationPage({Key? key, required this.plan}) : super(key: key);
+  const OtpVerificationPage({super.key, required this.plan});
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
@@ -43,7 +43,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       Future.delayed(const Duration(seconds: 4), () {
         ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       });
-
     } else {
       // Show an error message if OTP is wrong
       ScaffoldMessenger.of(context).showSnackBar(
@@ -62,7 +61,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       height: 56,
       textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.transparent),
       ),
@@ -89,7 +88,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 32),
-              
+
               // The Pinput widget
               Pinput(
                 controller: pinController,

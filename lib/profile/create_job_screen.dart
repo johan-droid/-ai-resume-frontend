@@ -72,7 +72,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
       // 3. Pop the screen AND return the newJob object to the previous screen
       Navigator.pop(context, newJob);
       // --- END OF MODIFICATION ---
-      
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -99,7 +98,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             children: [
               // --- Job Role Dropdown ---
               DropdownButtonFormField<String>(
-                value: _selectedRole,
+                initialValue: _selectedRole,
                 hint: const Text('Select Job Role'),
                 decoration: _buildInputDecoration(
                     'Job Role *', Icons.work_outline_rounded),
@@ -149,8 +148,9 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                     'Number of Openings *', Icons.group_add_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                validator: (value) =>
-                    value!.isEmpty ? 'Please enter the number of openings' : null,
+                validator: (value) => value!.isEmpty
+                    ? 'Please enter the number of openings'
+                    : null,
               ),
               const SizedBox(height: 16),
 

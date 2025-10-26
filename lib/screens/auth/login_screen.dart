@@ -426,7 +426,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   icon: Icons.phone_outlined,
                                   keyboardType: TextInputType.phone,
                                   validator: (value) {
-                                    if (value == null || value.trim().length < 10) {
+                                    if (_selectedRole == 'User' && (value == null || value.trim().length < 10)) {
                                       return 'Please enter a valid 10-digit number';
                                     }
                                     return null;
@@ -434,24 +434,22 @@ class _LoginScreenState extends State<LoginScreen>
                                 ),
                                 const SizedBox(height: 20),
                               ],
-                              _buildTextField(
-                                controller: _emailController,
-                                label: _selectedRole == 'User'
-                                    ? 'Email address'
-                                    : "Organization's Email",
-                                icon: Icons.email_outlined,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Please enter your email address';
-                                  }
-                                  if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                                    return 'Please enter a valid email address';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 20),
+                              if (_selectedRole == 'Organization') ...[
+                                _buildTextField(
+                                  controller: _emailController,
+                                  label: "Organization's Email",
+                                  icon: Icons.email_outlined,
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: (value) {
+                                    if (_selectedRole == 'Organization') {
+                                      if (value == null || value.trim().isEmpty) return 'Please enter email';
+                                      if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) return 'Enter valid email';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                              ],
                               _buildTextField(
                                 controller: _passwordController,
                                 label: 'Password',
