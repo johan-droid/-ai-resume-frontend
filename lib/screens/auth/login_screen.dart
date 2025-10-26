@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:rezume_app/main.dart';
 import 'package:rezume_app/screens/auth/registration_screen.dart';
@@ -25,11 +24,11 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<Offset> _slideAnimation;
 
   // Update these color values for User role
-  final Color _userPrimaryColor = const Color(0xFF1E40AF);    // Darker blue
-  final Color _userSecondaryColor = const Color(0xFF2563EB);  // Rich blue
-  
+  final Color _userPrimaryColor = const Color(0xFF1E40AF); // Darker blue
+  final Color _userSecondaryColor = const Color(0xFF2563EB); // Rich blue
+
   // Keep organization colors as is
-  final Color _orgPrimaryColor = const Color(0xFF0EA5E9);     
+  final Color _orgPrimaryColor = const Color(0xFF0EA5E9);
   final Color _orgSecondaryColor = const Color(0xFF38BDF8);
 
   Color get _currentPrimaryColor =>
@@ -78,7 +77,8 @@ class _LoginScreenState extends State<LoginScreen>
             ),
             backgroundColor: Colors.green.shade600,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             duration: const Duration(seconds: 3),
           ),
         );
@@ -115,7 +115,8 @@ class _LoginScreenState extends State<LoginScreen>
           content: const Text('Please fill in all fields correctly'),
           backgroundColor: Colors.red.shade600,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       );
     }
@@ -149,9 +150,8 @@ class _LoginScreenState extends State<LoginScreen>
                 color: isSelected ? null : Colors.white.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: isSelected
-                      ? Colors.white
-                      : Colors.white.withOpacity(0.2),
+                  color:
+                      isSelected ? Colors.white : Colors.white.withOpacity(0.2),
                   width: isSelected ? 3 : 2,
                 ),
                 boxShadow: isSelected
@@ -205,7 +205,8 @@ class _LoginScreenState extends State<LoginScreen>
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: isSelected ? 16 : 14,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.w500,
                       letterSpacing: isSelected ? 0.5 : 0,
                     ),
                   ),
@@ -380,15 +381,16 @@ class _LoginScreenState extends State<LoginScreen>
                               icon: Icons.person_outline_rounded,
                               label: 'User',
                               isSelected: _selectedRole == 'User',
-                              onTap: () => setState(() => _selectedRole = 'User'),
+                              onTap: () =>
+                                  setState(() => _selectedRole = 'User'),
                             ),
                             const SizedBox(width: 16),
                             _buildAnimatedRoleButton(
                               icon: Icons.business_rounded,
                               label: 'Organization',
                               isSelected: _selectedRole == 'Organization',
-                              onTap: () =>
-                                  setState(() => _selectedRole = 'Organization'),
+                              onTap: () => setState(
+                                  () => _selectedRole = 'Organization'),
                             ),
                           ],
                         ),
@@ -426,7 +428,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   icon: Icons.phone_outlined,
                                   keyboardType: TextInputType.phone,
                                   validator: (value) {
-                                    if (_selectedRole == 'User' && (value == null || value.trim().length < 10)) {
+                                    if (value == null ||
+                                        value.trim().length < 10) {
                                       return 'Please enter a valid 10-digit number';
                                     }
                                     return null;
@@ -434,29 +437,33 @@ class _LoginScreenState extends State<LoginScreen>
                                 ),
                                 const SizedBox(height: 20),
                               ],
-                              if (_selectedRole == 'Organization') ...[
-                                _buildTextField(
-                                  controller: _emailController,
-                                  label: "Organization's Email",
-                                  icon: Icons.email_outlined,
-                                  keyboardType: TextInputType.emailAddress,
-                                  validator: (value) {
-                                    if (_selectedRole == 'Organization') {
-                                      if (value == null || value.trim().isEmpty) return 'Please enter email';
-                                      if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) return 'Enter valid email';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 20),
-                              ],
+                              _buildTextField(
+                                controller: _emailController,
+                                label: _selectedRole == 'User'
+                                    ? 'Email address'
+                                    : "Organization's Email",
+                                icon: Icons.email_outlined,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'Please enter your email address';
+                                  }
+                                  if (!RegExp(r'\S+@\S+\.\S+')
+                                      .hasMatch(value)) {
+                                    return 'Please enter a valid email address';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 20),
                               _buildTextField(
                                 controller: _passwordController,
                                 label: 'Password',
                                 icon: Icons.lock_outline_rounded,
                                 isPassword: true,
                                 validator: (value) {
-                                  if (value == null || value.trim().length < 6) {
+                                  if (value == null ||
+                                      value.trim().length < 6) {
                                     return 'Password must be at least 6 characters';
                                   }
                                   return null;
@@ -469,7 +476,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   onPressed: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ForgotPasswordScreen(
+                                      builder: (context) =>
+                                          ForgotPasswordScreen(
                                         themeColor: _currentPrimaryColor,
                                         role: _selectedRole,
                                       ),
@@ -496,7 +504,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: _currentPrimaryColor.withOpacity(0.4),
+                                      color:
+                                          _currentPrimaryColor.withOpacity(0.4),
                                       blurRadius: 12,
                                       offset: const Offset(0, 6),
                                     ),
@@ -507,7 +516,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     shadowColor: Colors.transparent,
-                                    minimumSize: const Size(double.infinity, 56),
+                                    minimumSize:
+                                        const Size(double.infinity, 56),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16),
                                     ),
@@ -557,7 +567,8 @@ class _LoginScreenState extends State<LoginScreen>
                                     style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero,
                                       minimumSize: const Size(0, 0),
-                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
                                     ),
                                     child: Text(
                                       'Register',
