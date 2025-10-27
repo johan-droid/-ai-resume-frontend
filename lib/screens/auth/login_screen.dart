@@ -121,6 +121,23 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
+  // --- NEW: Guest Login Function ---
+  // This function bypasses validation and logs in as a 'User'
+  void _loginAsGuest() {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            MainScreen(userRole: 'User'), // Pass 'User' role for guest
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
+  }
+  // --- END: Guest Login Function ---
+
   Widget _buildAnimatedRoleButton({
     required IconData icon,
     required String label,
@@ -439,7 +456,31 @@ class _LoginScreenState extends State<LoginScreen>
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 24),
+
+                              // --- START: Added Guest Login Button ---
+                              // Only show this button if the 'User' role is selected
+                              if (_selectedRole == 'User') ...[
+                                const SizedBox(height: 16),
+                                TextButton(
+                                  onPressed: _loginAsGuest,
+                                  style: TextButton.styleFrom(
+                                    minimumSize: const Size(double.infinity, 44),
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  child: Text(
+                                    'Create Guest Account?',
+                                    style: TextStyle(
+                                      color: _currentPrimaryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              // --- END: Added Guest Login Button ---
+
+                              const SizedBox(height: 16), // Was 24
                               Container(
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
