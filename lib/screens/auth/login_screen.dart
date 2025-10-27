@@ -402,11 +402,14 @@ class _LoginScreenState extends State<LoginScreen>
                                   keyboardType: TextInputType.emailAddress,
                                   validator: (value) {
                                     if (_selectedRole == 'Organization') {
-                                      if (value == null || value.trim().isEmpty)
+                                      if (value == null ||
+                                          value.trim().isEmpty) {
                                         return 'Please enter email';
+                                      }
                                       if (!RegExp(r'\S+@\S+\.\S+')
-                                          .hasMatch(value))
+                                          .hasMatch(value)) {
                                         return 'Enter valid email';
+                                      }
                                     }
                                     return null;
                                   },
@@ -464,8 +467,10 @@ class _LoginScreenState extends State<LoginScreen>
                                 TextButton(
                                   onPressed: _loginAsGuest,
                                   style: TextButton.styleFrom(
-                                    minimumSize: const Size(double.infinity, 44),
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    minimumSize:
+                                        const Size(double.infinity, 44),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                   ),
                                   child: Text(
                                     'Create Guest Account?',

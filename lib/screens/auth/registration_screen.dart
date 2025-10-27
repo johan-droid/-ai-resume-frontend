@@ -60,8 +60,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       strength = 0.25;
       if (RegExp(r'[A-Z]').hasMatch(password)) strength += 0.25;
       if (RegExp(r'[0-9]').hasMatch(password)) strength += 0.25;
-      if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password))
+      if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
         strength += 0.25;
+      }
     }
 
     if (strength >= 1.0) {

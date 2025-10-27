@@ -12,6 +12,21 @@ class LanguageSelectionScreen extends StatefulWidget {
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
+  // State variables for dropdown
+  String? _selectedOtherLanguage; // Holds the selection from dropdown (null initially)
+
+  // Define the languages for the dropdown
+  final List<Map<String, String>> _otherLanguages = [
+    {'code': 'hi', 'name': 'हिंदी'},
+    {'code': 'or', 'name': 'ଓଡ଼ିଆ'},
+    {'code': 'ta', 'name': 'தமிழ்'},
+    {'code': 'te', 'name': 'తెలుగు'},
+    {'code': 'ml', 'name': 'മലയാളം'},
+    {'code': 'kn', 'name': 'ಕನ್ನಡ'},
+    {'code': 'bn', 'name': 'বাংলা'},
+    {'code': 'mr', 'name': 'मराठी'},
+  ];
+
   // Helper method for building the new language buttons
   Widget _buildLanguageButton({
     required String text,
@@ -107,28 +122,53 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               ),
               const SizedBox(height: 40),
 
-              // --- 3. New Language Buttons ---
+              // --- English Button ---
               _buildLanguageButton(
                 text: 'English',
                 onTap: () {
-                  _selectLanguage(context, 'en');
+                  Provider.of<LanguageProvider>(context, listen: false).changeLanguage(Locale('en'));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  );
                 },
               ),
+              const SizedBox(height: 16), // Space between button and dropdown
 
-              _buildLanguageButton(
-                text: 'हिंदी', // Hindi
-                onTap: () {
-                  _selectLanguage(context, 'hi');
+              // --- Dropdown for Other Languages ---
+              DropdownButtonFormField<String>(
+                value: _selectedOtherLanguage,
+                isExpanded: true, // Make dropdown take full width
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.blue[50], // Match button background
+                  hintText: 'Choose other Indian languages',
+                  prefixIcon: const Icon(Icons.language, color: Color(0xFF0056b3)), // Add an icon
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none, // Clean look
+                  ),
+                ),
+                items: _otherLanguages.map((language) {
+                  return DropdownMenuItem<String>(
+                    value: language['code'],
+                    child: Text(language['name']!),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    setState(() {
+                      _selectedOtherLanguage = newValue;
+                    });
+                    // Update provider and navigate
+                    Provider.of<LanguageProvider>(context, listen: false).changeLanguage(Locale(newValue));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    );
+                  }
                 },
               ),
-
-              _buildLanguageButton(
-                text: 'ଓଡ଼ିଆ', // Odia
-                onTap: () {
-                  _selectLanguage(context, 'or');
-                },
-              ),
-              // Bengali (বাংলা) and "Choose your language" buttons are removed.
             ],
           ),
         ),

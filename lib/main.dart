@@ -41,6 +41,12 @@ class MyApp extends StatelessWidget {
         Locale('en', ''), // English
         Locale('hi', ''), // Hindi
         Locale('or', ''), // Odia
+        Locale('ta', ''), // Tamil
+        Locale('te', ''), // Telugu
+        Locale('ml', ''), // Malayalam
+        Locale('kn', ''), // Kannada
+        Locale('bn', ''), // Bengali
+        Locale('mr', ''), // Marathi
       ],
       localizationsDelegates: const [
         AppLocalizations.delegate,
