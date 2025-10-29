@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      
+
       // --- LOCALIZATION SETTINGS ---
       locale: languageProvider.appLocale,
       supportedLocales: const [
@@ -71,8 +71,10 @@ class MyApp extends StatelessWidget {
 
 class MainScreen extends StatefulWidget {
   final String userRole;
-  
-  const MainScreen({super.key, this.userRole = 'User'});
+  final bool paymentSuccess;
+
+  const MainScreen(
+      {super.key, this.userRole = 'User', this.paymentSuccess = false});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -88,6 +90,39 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     // Set initial mode based on userRole
     _isOrganizationMode = widget.userRole == 'Organization';
+
+    // Show success banner if payment was successful
+    if (widget.paymentSuccess) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showMaterialBanner(
+            MaterialBanner(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+              content: const Text(
+                'Payment Successful!',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16),
+              ),
+              backgroundColor: Colors.green.shade700,
+              actions: [const SizedBox.shrink()],
+              elevation: 2.0,
+              leading:
+                  const Icon(Icons.check_circle_outline, color: Colors.white),
+            ),
+          );
+
+          // Automatically hide the banner after 3 seconds
+          Future.delayed(const Duration(seconds: 3), () {
+            if (mounted) {
+              ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+            }
+          });
+        }
+      });
+    }
   }
 
   // Method to navigate to a specific tab
@@ -99,11 +134,11 @@ class _MainScreenState extends State<MainScreen> {
 
   // --- JOB SEEKER UI (Templates & ATS Score, NO Job tab) ---
   List<Widget> get _userPages => [
-    HomeScreen(role: 'User', onNavigateToTab: _navigateToTab),
-    const TemplatesScreen(),
-    const UploadResumeScreen(),
-    const ProfileScreen(role: 'User'),
-  ];
+        HomeScreen(role: 'User', onNavigateToTab: _navigateToTab),
+        const TemplatesScreen(),
+        const UploadResumeScreen(),
+        const ProfileScreen(role: 'User'),
+      ];
 
   final List<BottomNavigationBarItem> _userNavItems = [
     const BottomNavigationBarItem(
@@ -130,11 +165,11 @@ class _MainScreenState extends State<MainScreen> {
 
   // --- ORGANIZATION UI (Subscription) ---
   List<Widget> get _organizationPages => [
-    HomeScreen(role: 'Organization', onNavigateToTab: _navigateToTab),
-    const SubscriptionPage(),
-    const CandidateListScreen(),
-    const ProfileScreen(role: 'Organization'),
-  ];
+        HomeScreen(role: 'Organization', onNavigateToTab: _navigateToTab),
+        const SubscriptionPage(),
+        const CandidateListScreen(),
+        const ProfileScreen(role: 'Organization'),
+      ];
 
   final List<BottomNavigationBarItem> _organizationNavItems = [
     const BottomNavigationBarItem(
@@ -163,7 +198,8 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final bool isOrg = _isOrganizationMode;
     final List<Widget> currentPages = isOrg ? _organizationPages : _userPages;
-    final List<BottomNavigationBarItem> currentNavItems = isOrg ? _organizationNavItems : _userNavItems;
+    final List<BottomNavigationBarItem> currentNavItems =
+        isOrg ? _organizationNavItems : _userNavItems;
 
     return Scaffold(
       // --- MODIFICATION ---

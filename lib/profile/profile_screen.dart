@@ -14,6 +14,7 @@ import 'package:rezume_app/profile/posted_jobs_screen.dart';
 
 // --- *** IMPORT THE NEW JOB SEARCH SCREEN *** ---
 import 'package:rezume_app/profile/user_job_search_screen.dart';
+import 'package:rezume_app/subscription/subscription_page.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String role; // 'User' or 'Organization'
@@ -69,171 +70,170 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         automaticallyImplyLeading: false, // Removed back button
       ),
-      body: Column(
-        children: [
-          // --- 1. NEW REDESIGNED HEADER ---
-          Padding(
-            padding: const EdgeInsets.only(top: 30.0),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: _currentPrimaryColor.withOpacityCompat(0.1),
-                  child: Text(
-                    _profileAvatarText,
-                    style: TextStyle(
-                        fontSize: 48,
-                        color: _currentPrimaryColor,
-                        fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // --- Profile Header (Avatar, Name, Contact) ---
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: _currentPrimaryColor.withOpacityCompat(0.1),
+                    child: Text(
+                      _profileAvatarText,
+                      style: TextStyle(
+                          fontSize: 48,
+                          color: _currentPrimaryColor,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  _profileName,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  _profileContact,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  Text(_profileName, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 4),
+                  Text(_profileContact, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
+                ],
+              ),
             ),
-          ),
 
-          // --- 2. REDESIGNED BUTTONS ---
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.only(top: 30.0),
-              children: [
-                _buildProfileOption(
-                  icon: Icons.person_outline_rounded,
-                  title: 'Edit Profile',
-                  onTap: () {
-                    if (widget.role == 'User') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EditProfileScreen(),
-                        ),
-                      );
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OrgEditProfileScreen(
-                            orgName: _profileName,
-                            orgEmail: _profileEmail,
-                            themeColor: _currentPrimaryColor,
-                            onProfileUpdated: (newName, newEmail) {
-                              setState(() {
-                                _profileName = newName;
-                                _profileEmail = newEmail;
-                                _profileContact = newEmail;
-                              });
-                            },
+            // --- Profile Action Buttons (Reordered) ---
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                children: [
+                  // 1. Edit Profile (Same as before)
+                  _buildProfileOption(
+                    icon: Icons.person_outline_rounded,
+                    title: 'Edit Profile',
+                    onTap: () {
+                      if (widget.role == 'User') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditProfileScreen(),
                           ),
-                        ),
-                      );
-                    }
-                  },
-                  color: _currentPrimaryColor,
-                ),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OrgEditProfileScreen(
+                              orgName: _profileName,
+                              orgEmail: _profileEmail,
+                              themeColor: _currentPrimaryColor,
+                              onProfileUpdated: (newName, newEmail) {
+                                setState(() {
+                                  _profileName = newName;
+                                  _profileEmail = newEmail;
+                                  _profileContact = newEmail;
+                                });
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    color: _currentPrimaryColor,
+                  ),
+                  const SizedBox(height: 12),
 
-                // --- *** MODIFIED SECTION *** ---
-                if (widget.role == 'User') ...[
-                  // USER ONLY: My Saved Resumes
+                  // --- 2. ACTIVE PLAN (Organization Only, using standard button) ---
+                  if (widget.role == 'Organization') ...[
+                    _buildProfileOption(
+                      icon: Icons.subscriptions_outlined,
+                      title: 'Active Plan',
+                      subtitle: 'Standard Hirer',
+                      onTap: () {
+                        _showActivePlanDialog(context, 'Standard Hirer');
+                      },
+                      color: _currentPrimaryColor,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                  // --- END ACTIVE PLAN ---
+
+                  // 3. Conditional Options based on role (Resume/Jobs)
+                  if (widget.role == 'User') ...[
+                    _buildProfileOption(
+                      icon: Icons.article_outlined,
+                      title: 'My Saved Resumes',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SavedResumesScreen(),
+                          ),
+                        );
+                      },
+                      color: _currentPrimaryColor,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildProfileOption(
+                      icon: Icons.work_outline_rounded,
+                      title: 'Apply for Jobs',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UserJobSearchScreen(),
+                          ),
+                        );
+                      },
+                      color: _currentPrimaryColor,
+                    ),
+                    const SizedBox(height: 12),
+                  ] else ...[
+                    _buildProfileOption(
+                      icon: Icons.add_business_rounded,
+                      title: 'Create Job',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PostedJobsScreen(themeColor: _currentPrimaryColor),
+                          ),
+                        );
+                      },
+                      color: _currentPrimaryColor,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+
+                  // 4. Help Center
                   _buildProfileOption(
-                    icon: Icons.article_outlined,
-                    title: 'My Saved Resumes',
+                    icon: Icons.help_outline_rounded,
+                    title: 'Help Center',
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const SavedResumesScreen(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const HelpCenterScreen()),
                       );
                     },
                     color: _currentPrimaryColor,
                   ),
+                  const SizedBox(height: 12),
 
-                  // --- *** NEW BUTTON AS REQUESTED *** ---
+                  // 5. Logout
                   _buildProfileOption(
-                    // --- *** THIS IS THE FIX *** ---
-                    icon: Icons.work_outline_rounded, // <-- FINAL FIX
-                    // --- *** END OF FIX *** ---
-                    title: 'Apply for Jobs',
+                    icon: Icons.logout_rounded,
+                    title: 'Logout',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const UserJobSearchScreen(),
-                        ),
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        (Route<dynamic> route) => false,
                       );
                     },
-                    color: _currentPrimaryColor,
+                    color: Colors.red.shade600,
+                    isLogout: true,
                   ),
-                  // --- *** END OF NEW BUTTON *** ---
-                ] else
-                  // ORGANIZATION ONLY: Create Job
-                  _buildProfileOption(
-                    icon: Icons.add_business_rounded, // Changed icon
-                    title: 'Create Job', // Changed title
-                    onTap: () {
-                      // --- THIS IS THE MODIFICATION ---
-                      // Navigate to the new PostedJobsScreen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PostedJobsScreen(
-                              themeColor: _currentPrimaryColor),
-                        ),
-                      );
-                      // --- END OF MODIFICATION ---
-                    },
-                    color: _currentPrimaryColor,
-                  ),
-
-                // --- "Apply to Companies" button has been REMOVED ---
-                // --- END OF MODIFICATION ---
-
-                _buildProfileOption(
-                  icon: Icons.help_outline_rounded,
-                  title: 'Help Center',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HelpCenterScreen()),
-                    );
-                  },
-                  color: _currentPrimaryColor,
-                ),
-                const SizedBox(height: 20), // Spacer
-                _buildProfileOption(
-                  icon: Icons.logout_rounded,
-                  title: 'Logout',
-                  onTap: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                  color: Colors.red.shade600,
-                  isLogout: true,
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
@@ -241,6 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildProfileOption({
     required IconData icon,
     required String title,
+    String? subtitle,
     required VoidCallback onTap,
     required Color color,
     bool isLogout = false,
@@ -265,12 +266,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
             fontSize: 16,
           ),
         ),
+        subtitle: subtitle != null
+            ? Text(
+                subtitle,
+                style: TextStyle(color: color.withOpacity(0.7), fontSize: 14),
+              )
+            : null,
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
           size: 16,
           color: color,
         ),
       ),
+    );
+  }
+
+  
+
+  // --- ADD THIS DIALOG FUNCTION ---
+  void _showActivePlanDialog(BuildContext context, String planName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Icon(Icons.subscriptions_outlined, color: _currentPrimaryColor),
+              const SizedBox(width: 10),
+              const Text('Your Active Plan'),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                planName,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: _currentPrimaryColor),
+              ),
+              const SizedBox(height: 15),
+              const Text('This is your current subscription.'),
+              const SizedBox(height: 8),
+              Text('Renews on: Nov 30, 2025 (Dummy)', style: TextStyle(color: Colors.grey[600])),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Go to Subscription Page'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPage()));
+              },
+            ),
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

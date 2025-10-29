@@ -32,6 +32,7 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
 
   final List<ChatMessage> _messages = [];
   final TextEditingController _textController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   final FocusNode _chatFocusNode = FocusNode();
   int _currentQuestionIndex = 0;
   final Map<String, String> _updatedDetails = {};
@@ -64,9 +65,23 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _textController.dispose();
     _chatFocusNode.dispose();
     super.dispose();
+  }
+
+  // Scroll helper - scrolls to the bottom when messages change
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   void _askQuestion() {
@@ -77,6 +92,7 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
           isUser: false,
         ));
       });
+      _scrollToBottom();
     } else {
       setState(() {
         _messages.add(ChatMessage(
@@ -86,6 +102,7 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
         ));
         _isConversationComplete = true;
       });
+      _scrollToBottom();
       if (kDebugMode) {
         debugPrint('Final Updated Details: $_updatedDetails');
       }
@@ -101,6 +118,7 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
     setState(() {
       _messages.add(ChatMessage(text: userInput, isUser: true));
     });
+    _scrollToBottom();
 
     // Don't save the answer to the "Welcome" message
     if (_currentQuestionIndex > 0 &&
@@ -200,6 +218,7 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               reverse: false,
               padding: const EdgeInsets.all(16.0),
               itemCount: _messages.length,

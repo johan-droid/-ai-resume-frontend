@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'package:rezume_app/main.dart';
 import 'subscription_page.dart'; // To get the SubscriptionPlan model
 
 class OtpVerificationPage extends StatefulWidget {
@@ -16,34 +17,17 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
   void _verifyOtp(String pin) {
     if (pin == dummyOtp) {
-      // 1. Pop all the way back to the first screen
-      Navigator.of(context).popUntil((route) => route.isFirst);
-
-      // 2. Show the Material 3 success banner AT THE TOP
-      ScaffoldMessenger.of(context).showMaterialBanner(
-        MaterialBanner(
-          padding: const EdgeInsets.all(16),
-          content: const Text(
-            'Payment Successful!',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      // Navigate back to MainScreen, removing OTP/Payment screens
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainScreen(
+            userRole: 'Organization',
+            paymentSuccess: true,
           ),
-          backgroundColor: Colors.green.shade700,
-          actions: [
-            TextButton(
-              onPressed: () =>
-                  ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
-              child:
-                  const Text('DISMISS', style: TextStyle(color: Colors.white)),
-            ),
-          ],
         ),
+        (Route<dynamic> route) => false, // Remove all previous routes
       );
-
-      // 3. Automatically hide the banner after 4 seconds
-      Future.delayed(const Duration(seconds: 4), () {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-      });
     } else {
       // Show an error message if OTP is wrong
       ScaffoldMessenger.of(context).showSnackBar(
@@ -101,9 +85,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                         color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
-                onCompleted: (pin) {
-                  _verifyOtp(pin); // Automatically verify on complete
-                },
+                // onCompleted: (pin) {
+                //   _verifyOtp(pin); // Automatically verify on complete
+                // },
               ),
               const SizedBox(height: 32),
               FilledButton(

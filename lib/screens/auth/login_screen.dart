@@ -466,24 +466,40 @@ class _LoginScreenState extends State<LoginScreen>
                               // Only show this button if the 'User' role is selected
                               if (_selectedRole == 'User') ...[
                                 const SizedBox(height: 16),
-                                TextButton(
+                                // --- NEW GUEST LOGIN BUTTON (Outlined Style) ---
+                                OutlinedButton(
                                   onPressed: _loginAsGuest,
-                                  style: TextButton.styleFrom(
-                                    minimumSize:
-                                        const Size(double.infinity, 44),
+                                  style: OutlinedButton.styleFrom(
+                                    minimumSize: const Size(double.infinity,
+                                        44), // Full width, standard height
+                                    foregroundColor:
+                                        _currentPrimaryColor.withOpacityCompat(
+                                            0.8), // Text color (slightly transparent)
+                                    side: BorderSide(
+                                      color: _currentPrimaryColor.withOpacityCompat(
+                                          0.3), // Border color (more transparent)
+                                      width: 1.5,
+                                    ),
+                                    backgroundColor:
+                                        _currentPrimaryColor.withOpacityCompat(
+                                            0.05), // Very faint background tint
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          12), // Match text fields
+                                    ),
                                     tapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'Create Guest Account?',
                                     style: TextStyle(
-                                      color: _currentPrimaryColor,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight:
+                                          FontWeight.w600, // Slightly bolder
                                       fontSize: 16,
-                                      decoration: TextDecoration.underline,
                                     ),
                                   ),
                                 ),
+                                // --- END NEW BUTTON ---
                               ],
                               // --- END: Added Guest Login Button ---
 
