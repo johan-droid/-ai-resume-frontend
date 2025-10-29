@@ -1,8 +1,10 @@
 // lib/screens/auth/org_registration_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
 // Import the new verification screen
 import 'package:rezume_app/screens/auth/email_verification_screen.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class OrgRegistrationScreen extends StatefulWidget {
   const OrgRegistrationScreen({super.key});
@@ -35,7 +37,9 @@ class _OrgRegistrationScreenState extends State<OrgRegistrationScreen> {
   // --- Registration Logic ---
   void _registerOrg() {
     if (_formKey.currentState!.validate()) {
-      print('Organization Registration Submitted!');
+      if (kDebugMode) {
+        debugPrint('Organization Registration Submitted!');
+      }
       // Navigate to Email Verification Screen, passing the email
       Navigator.pushReplacement(
         // Use pushReplacement to remove this screen
@@ -111,7 +115,7 @@ class _OrgRegistrationScreenState extends State<OrgRegistrationScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Icon(Icons.business_rounded,
-                          color: Colors.white.withOpacity(0.9), size: 50),
+                          color: Colors.white.withOpacityCompat(0.9), size: 50),
                       SizedBox(height: 10),
                       Text('Organization Details',
                           style: TextStyle(

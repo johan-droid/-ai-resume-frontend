@@ -5,6 +5,7 @@ import 'package:rezume_app/models/resume_template_model.dart';
 import 'package:rezume_app/templates/resume_builder_screen.dart';
 // --- ADD THIS IMPORT ---
 import 'package:rezume_app/templates/voice_resume_builder_screen.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class TemplatesScreen extends StatefulWidget {
   const TemplatesScreen({super.key});
@@ -139,7 +140,8 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
               color: Colors.grey[200], // Light placeholder background
               child: Center(
                 child: Icon(
-                  _templateIcons[template.name] ?? Icons.article_outlined, // Use mapped icon
+                  _templateIcons[template.name] ??
+                      Icons.article_outlined, // Use mapped icon
                   size: 80,
                   color: Colors.grey[400],
                 ),
@@ -159,8 +161,8 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [
-                      Colors.black.withOpacity(0.8),
-                      Colors.black.withOpacity(0.0),
+                      Colors.black.withOpacityCompat(0.8),
+                      Colors.black.withOpacityCompat(0.0),
                     ],
                   ),
                 ),

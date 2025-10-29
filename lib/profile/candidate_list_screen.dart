@@ -1,6 +1,7 @@
 // lib/profile/candidate_list_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 import 'package:rezume_app/models/dummy_candidates.dart';
 import 'package:rezume_app/profile/resume_detail_screen.dart';
 
@@ -358,7 +359,7 @@ class _CandidateListScreenState extends State<CandidateListScreen> {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: _primaryColor.withOpacity(0.1),
+                    backgroundColor: _primaryColor.withOpacityCompat(0.1),
                     child: Text(
                       candidate.name.substring(0, 1),
                       style: TextStyle(

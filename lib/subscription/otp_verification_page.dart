@@ -41,6 +41,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
       // 3. Automatically hide the banner after 4 seconds
       Future.delayed(const Duration(seconds: 4), () {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       });
     } else {

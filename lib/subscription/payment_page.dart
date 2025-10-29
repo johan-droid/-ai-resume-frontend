@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart'; // Add this import at the top
+import 'package:rezume_app/utils/color_extensions.dart';
 import 'subscription_page.dart'; // To get the SubscriptionPlan model
 import 'otp_verification_page.dart'; // To navigate to the next step
 
@@ -124,7 +125,7 @@ class _PaymentPageState extends State<PaymentPage> {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withOpacityCompat(0.2),
                   spreadRadius: 2,
                   blurRadius: 5,
                   offset: const Offset(0, 2),

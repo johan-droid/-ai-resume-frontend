@@ -1,7 +1,9 @@
 // lib/screens/auth/registration_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
 import 'package:rezume_app/screens/onboarding/experience_level_screen.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -92,7 +94,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         );
         return;
       }
-      print('Registration successful!');
+      if (kDebugMode) {
+        debugPrint('Registration successful!');
+      }
 
       // Navigate to onboarding flow for User registration
       Navigator.pushReplacement(
@@ -186,7 +190,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   right: 24),
               child: Card(
                 elevation: 8,
-                shadowColor: Colors.black.withOpacity(0.1),
+                shadowColor: Colors.black.withOpacityCompat(0.1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -354,7 +358,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }) {
     const Color selectedColor = Color(0xFF007BFF);
     final Color unselectedBgColor = Colors.grey[200]!;
-    final Color selectedBgColor = selectedColor.withOpacity(0.15);
+    final Color selectedBgColor = selectedColor.withOpacityCompat(0.15);
     final Color unselectedTextColor = Colors.grey[600]!;
 
     Widget iconWidget;

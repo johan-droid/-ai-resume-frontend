@@ -2,7 +2,9 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
 import 'package:rezume_app/screens/auth/login_screen.dart'; // To navigate back
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   final String email;
@@ -32,7 +34,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     super.initState();
     _startTimer(); // Start timer immediately
     // DUMMY: Simulate sending the code on screen load
-    print('Sending verification code to ${widget.email}');
+    if (kDebugMode) {
+      debugPrint('Sending verification code to ${widget.email}');
+    }
   }
 
   @override
@@ -62,7 +66,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   void _resendCode() {
     if (_canResend) {
       // DUMMY: Simulate resending
-      print('Resending verification code to ${widget.email}');
+      if (kDebugMode) {
+        debugPrint('Resending verification code to ${widget.email}');
+      }
       _startTimer(); // Restart timer
     }
   }
@@ -133,7 +139,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Icon(Icons.mark_email_read_outlined,
-                          color: Colors.white.withOpacity(0.9), size: 50),
+                          color: Colors.white.withOpacityCompat(0.9), size: 50),
                       SizedBox(height: 10),
                       Text('Verify Email',
                           style: TextStyle(

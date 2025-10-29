@@ -1,6 +1,8 @@
 // lib/profile/saved_resumes_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
+import 'package:rezume_app/utils/color_extensions.dart';
 // PDF Generation Imports
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
@@ -170,7 +172,9 @@ class SavedResumesScreen extends StatelessWidget {
         fontFallback: [hindiTtf, odiaTtf],
       );
     } catch (e) {
-      print('Custom fonts not found. Using default fonts. Error: $e');
+      if (kDebugMode) {
+        debugPrint('Custom fonts not found. Using default fonts. Error: $e');
+      }
       myTheme = pw.ThemeData.base();
     }
 
@@ -423,7 +427,7 @@ class SavedResumesScreen extends StatelessWidget {
           ),
           subtitle: Text(
             subtitle,
-            style: TextStyle(color: color.withOpacity(0.7)),
+            style: TextStyle(color: color.withOpacityCompat(0.7)),
           ),
           trailing: const Icon(
             Icons.arrow_forward_ios_rounded,

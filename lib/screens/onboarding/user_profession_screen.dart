@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rezume_app/main.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class UserProfessionScreen extends StatelessWidget {
   const UserProfessionScreen({super.key});
@@ -23,7 +24,8 @@ class UserProfessionScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.work_outline_rounded, size: 80, color: Colors.blueAccent),
+              const Icon(Icons.work_outline_rounded,
+                  size: 80, color: Colors.blueAccent),
               const SizedBox(height: 20),
               const Text(
                 "What is your current profession?",
@@ -43,9 +45,12 @@ class UserProfessionScreen extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    _buildProfessionCard(context, Icons.school, "College Student"),
-                    _buildProfessionCard(context, Icons.construction, "Skilled Worker"),
-                    _buildProfessionCard(context, Icons.business_center, "Employee"),
+                    _buildProfessionCard(
+                        context, Icons.school, "College Student"),
+                    _buildProfessionCard(
+                        context, Icons.construction, "Skilled Worker"),
+                    _buildProfessionCard(
+                        context, Icons.business_center, "Employee"),
                     _buildProfessionCard(context, Icons.search, "Job Seeker"),
                   ],
                 ),
@@ -57,19 +62,21 @@ class UserProfessionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfessionCard(BuildContext context, IconData icon, String title) {
+  Widget _buildProfessionCard(
+      BuildContext context, IconData icon, String title) {
     return GestureDetector(
       onTap: () {
         // Navigate to the main screen with bottom navigation
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const MainScreen()), // Changed this line
-            (Route<dynamic> route) => false,
-          );
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const MainScreen()), // Changed this line
+          (Route<dynamic> route) => false,
+        );
       },
       child: Card(
         elevation: 4,
-        shadowColor: Colors.grey.withOpacity(0.2),
+        shadowColor: Colors.grey.withOpacityCompat(0.2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

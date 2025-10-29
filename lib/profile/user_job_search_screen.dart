@@ -1,6 +1,7 @@
 // lib/profile/user_job_search_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 import 'package:intl/intl.dart'; // For formatting currency
 import 'package:rezume_app/models/dummy_jobs.dart'; // Import our new dummy jobs
 import 'package:rezume_app/profile/job_application_screen.dart'; // Import the application screen
@@ -385,7 +386,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: _primaryColor.withOpacity(0.1),
+                    backgroundColor: _primaryColor.withOpacityCompat(0.1),
                     child: Icon(job.logo, color: _primaryColor),
                   ),
                   const SizedBox(width: 12),
@@ -460,7 +461,7 @@ class _UserJobSearchScreenState extends State<UserJobSearchScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withOpacityCompat(0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(

@@ -1,6 +1,7 @@
 // lib/templates/voice_resume_builder_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
 import 'dart:async';
 
 // PDF Generation Imports
@@ -193,7 +194,9 @@ class _VoiceResumeBuilderScreenState extends State<VoiceResumeBuilderScreen>
         fontFallback: [hindiTtf, odiaTtf],
       );
     } catch (e) {
-      print('Custom fonts not found. Using default fonts. Error: $e');
+      if (kDebugMode) {
+        debugPrint('Custom fonts not found. Using default fonts. Error: $e');
+      }
       myTheme = pw.ThemeData.base();
     }
 

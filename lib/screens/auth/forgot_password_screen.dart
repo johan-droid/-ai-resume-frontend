@@ -2,6 +2,8 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   final Color themeColor;
@@ -59,8 +61,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   // --- 3. "Send Code" Logic ---
   void _sendCode() {
     if (_formKey.currentState!.validate()) {
-      final contactInfo = widget.role == 'User' ? _phoneController.text : _emailController.text;
-      print('Sending OTP to $contactInfo');
+      final contactInfo =
+          widget.role == 'User' ? _phoneController.text : _emailController.text;
+      if (kDebugMode) {
+        debugPrint('Sending OTP to $contactInfo');
+      }
       setState(() {
         _isOtpSent = true;
       });
@@ -247,8 +252,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
-            if (value == null || value.trim().isEmpty) return 'Please enter email';
-            if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) return 'Enter valid email';
+            if (value == null || value.trim().isEmpty) {
+              return 'Please enter email';
+            }
+            if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+              return 'Enter valid email';
+            }
             return null;
           },
         ),
@@ -271,7 +280,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   // --- UI for entering the OTP ---
   Widget _buildOtpScreen() {
-    final contactInfo = widget.role == 'User' ? _phoneController.text : _emailController.text;
+    final contactInfo =
+        widget.role == 'User' ? _phoneController.text : _emailController.text;
     return Column(
       children: [
         Text(
@@ -297,7 +307,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         _canResend
             ? TextButton(
                 onPressed: _resendCode,
-                child: Text('Resend Code', style: TextStyle(fontSize: 16, color: widget.themeColor)))
+                child: Text('Resend Code',
+                    style: TextStyle(fontSize: 16, color: widget.themeColor)))
             : Text('Resend OTP in $_timerText',
                 style: TextStyle(color: Colors.grey, fontSize: 16)),
 
@@ -319,7 +330,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           onPressed: _changeContact,
           child: Text(
             widget.role == 'User' ? 'Change Number' : 'Change Email',
-            style: TextStyle(color: widget.themeColor.withOpacity(0.8)),
+            style: TextStyle(color: widget.themeColor.withOpacityCompat(0.8)),
           ),
         ),
       ],

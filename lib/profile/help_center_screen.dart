@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class HelpCenterScreen extends StatefulWidget {
   const HelpCenterScreen({super.key});
@@ -49,7 +50,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
           subtitle: Text(
             subtitle,
             style: TextStyle(
-              color: color.withOpacity(0.7),
+              color: color.withOpacityCompat(0.7),
               fontSize: 15,
             ),
           ),

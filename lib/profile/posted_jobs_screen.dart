@@ -1,6 +1,7 @@
 // lib/profile/posted_jobs_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 import 'package:rezume_app/models/job_model.dart'; // Import our new model
 import 'package:rezume_app/profile/create_job_screen.dart'; // Import the create screen
 
@@ -47,7 +48,7 @@ class _PostedJobsScreenState extends State<PostedJobsScreen> {
       body: _postedJobs.isEmpty
           ? _buildEmptyState() // Show a message if no jobs are posted
           : _buildJobList(), // Show the list of jobs
-      
+
       // This is the "plus" button you requested
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToCreateJobScreen,
@@ -90,7 +91,7 @@ class _PostedJobsScreenState extends State<PostedJobsScreen> {
           margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8.0),
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: widget.themeColor.withOpacity(0.1),
+              backgroundColor: widget.themeColor.withOpacityCompat(0.1),
               child: Icon(Icons.work_outline_rounded, color: widget.themeColor),
             ),
             title: Text(

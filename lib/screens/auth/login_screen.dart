@@ -3,6 +3,7 @@ import 'package:rezume_app/main.dart';
 import 'package:rezume_app/screens/auth/registration_screen.dart';
 import 'package:rezume_app/screens/auth/org_registration_screen.dart';
 import 'package:rezume_app/screens/auth/forgot_password_screen.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool registrationSuccessful;
@@ -163,17 +164,18 @@ class _LoginScreenState extends State<LoginScreen>
                         end: Alignment.bottomRight,
                       )
                     : null,
-                color: isSelected ? null : Colors.white.withOpacity(0.1),
+                color: isSelected ? null : Colors.white.withOpacityCompat(0.1),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color:
-                      isSelected ? Colors.white : Colors.white.withOpacity(0.2),
+                  color: isSelected
+                      ? Colors.white
+                      : Colors.white.withOpacityCompat(0.2),
                   width: isSelected ? 3 : 2,
                 ),
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                          color: _currentPrimaryColor.withOpacity(0.6),
+                          color: _currentPrimaryColor.withOpacityCompat(0.6),
                           blurRadius: 15,
                           offset: const Offset(0, 4),
                           spreadRadius: 2,
@@ -269,7 +271,7 @@ class _LoginScreenState extends State<LoginScreen>
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withOpacityCompat(0.2),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Icon(
@@ -293,7 +295,7 @@ class _LoginScreenState extends State<LoginScreen>
                         Text(
                           'Sign in to continue your journey',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withOpacityCompat(0.9),
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
@@ -311,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen>
                         Text(
                           'Choose your role',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withOpacityCompat(0.9),
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -348,11 +350,11 @@ class _LoginScreenState extends State<LoginScreen>
                       child: Container(
                         padding: const EdgeInsets.all(28),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.95),
+                          color: Colors.white.withOpacityCompat(0.95),
                           borderRadius: BorderRadius.circular(32),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withOpacityCompat(0.1),
                               blurRadius: 30,
                               offset: const Offset(0, 10),
                             ),
@@ -497,8 +499,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: [
                                     BoxShadow(
-                                      color:
-                                          _currentPrimaryColor.withOpacity(0.4),
+                                      color: _currentPrimaryColor
+                                          .withOpacityCompat(0.4),
                                       blurRadius: 12,
                                       offset: const Offset(0, 6),
                                     ),

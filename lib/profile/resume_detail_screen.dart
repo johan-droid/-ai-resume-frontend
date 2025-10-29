@@ -1,6 +1,7 @@
 // lib/profile/resume_detail_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class ResumeDetailScreen extends StatelessWidget {
   final dynamic resumeData; // accept Map or Candidate object
@@ -290,7 +291,7 @@ class ResumeDetailScreen extends StatelessWidget {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Colors.grey.withOpacityCompat(0.3),
                     spreadRadius: 1,
                     blurRadius: 5,
                     offset: const Offset(0, -2),

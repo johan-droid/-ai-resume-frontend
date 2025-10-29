@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:rezume_app/models/dummy_jobs.dart'; // To get the job model
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class JobApplicationScreen extends StatefulWidget {
   final SearchableJob job;
@@ -75,9 +76,13 @@ class _JobApplicationScreenState extends State<JobApplicationScreen> {
 
       // Simulate network call
       Future.delayed(const Duration(seconds: 2), () {
+        // Ensure the state is still mounted before touching context
+        if (!mounted) return;
+
         setState(() {
           _isLoading = false;
         });
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -114,10 +119,10 @@ class _JobApplicationScreenState extends State<JobApplicationScreen> {
               // --- Job Details Card ---
               Card(
                 elevation: 1,
-                color: _primaryColor.withOpacity(0.05),
+                color: _primaryColor.withOpacityCompat(0.05),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: _primaryColor.withOpacity(0.3)),
+                  side: BorderSide(color: _primaryColor.withOpacityCompat(0.3)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

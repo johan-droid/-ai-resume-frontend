@@ -1,11 +1,13 @@
 // lib/ats_checker/resume_editor_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
 // For font loading
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 // Helper class for chat messages
 class ChatMessage {
@@ -84,7 +86,9 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
         ));
         _isConversationComplete = true;
       });
-      print('Final Updated Details: $_updatedDetails');
+      if (kDebugMode) {
+        debugPrint('Final Updated Details: $_updatedDetails');
+      }
     }
   }
 
@@ -135,7 +139,9 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
         fontFallback: [hindiTtf, odiaTtf],
       );
     } catch (e) {
-      print('Custom fonts not found. Using default fonts. Error: $e');
+      if (kDebugMode) {
+        debugPrint('Custom fonts not found. Using default fonts. Error: $e');
+      }
       myTheme = pw.ThemeData.base();
     }
 
@@ -244,7 +250,7 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withOpacityCompat(0.2),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, -2),
@@ -288,15 +294,13 @@ class _ResumeEditorScreenState extends State<ResumeEditorScreen> {
         margin: const EdgeInsets.symmetric(vertical: 5.0),
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: isUser
-              ? const Color(0xFF007BFF)
-              : Colors.white,
+          color: isUser ? const Color(0xFF007BFF) : Colors.white,
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: isUser
               ? []
               : [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.15),
+                    color: Colors.grey.withOpacityCompat(0.15),
                     spreadRadius: 1,
                     blurRadius: 3,
                     offset: const Offset(0, 1),

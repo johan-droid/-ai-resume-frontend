@@ -1,8 +1,10 @@
 // lib/screens/onboarding/employment_status_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
 // Import the final destination (Login Screen)
 import 'package:rezume_app/screens/auth/login_screen.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class EmploymentStatusScreen extends StatelessWidget {
   // Accept data from previous screens
@@ -10,7 +12,8 @@ class EmploymentStatusScreen extends StatelessWidget {
   final String selectedExperience;
 
   // const EmploymentStatusScreen({super.key, required this.registrationData, required this.selectedExperience});
-  const EmploymentStatusScreen({super.key, required this.selectedExperience}); // Simplified
+  const EmploymentStatusScreen(
+      {super.key, required this.selectedExperience}); // Simplified
 
   // --- Theme Colors (User Blue) ---
   final Color _primaryColor = const Color(0xFF007BFF);
@@ -34,36 +37,40 @@ class EmploymentStatusScreen extends StatelessWidget {
             Text(
               'What best describes your current role?',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87),
             ),
-             SizedBox(height: 40),
+            SizedBox(height: 40),
 
             // --- Option Buttons ---
-             _buildOptionCard(
+            _buildOptionCard(
               context: context,
               title: "College Student",
               subtitle: "Currently enrolled in a college or university.",
               onTap: () => _completeOnboarding(context, 'College Student'),
             ),
-             _buildOptionCard(
+            _buildOptionCard(
               context: context,
               title: "Employee / White-Collar",
               subtitle: "Working in an office or professional environment.",
-              onTap: () => _completeOnboarding(context, 'Employee / White-Collar'),
+              onTap: () =>
+                  _completeOnboarding(context, 'Employee / White-Collar'),
             ),
-             _buildOptionCard(
+            _buildOptionCard(
               context: context,
               title: "Worker / Blue-Collar",
               subtitle: "Working in a trade, manual labor, or skilled craft.",
               onTap: () => _completeOnboarding(context, 'Worker / Blue-Collar'),
             ),
-             _buildOptionCard(
+            _buildOptionCard(
               context: context,
               title: "Unemployed",
               subtitle: "Currently looking for job opportunities.",
               onTap: () => _completeOnboarding(context, 'Unemployed'),
             ),
-             _buildOptionCard(
+            _buildOptionCard(
               context: context,
               title: "Other",
               subtitle: "", // No subtitle for Other
@@ -77,13 +84,18 @@ class EmploymentStatusScreen extends StatelessWidget {
 
   // --- Navigation Logic ---
   void _completeOnboarding(BuildContext context, String selectedStatus) {
-    print("Selected Experience: $selectedExperience");
-    print("Selected Status: $selectedStatus");
+    if (kDebugMode) {
+      debugPrint("Selected Experience: $selectedExperience");
+    }
+    if (kDebugMode) {
+      debugPrint("Selected Status: $selectedStatus");
+    }
     // Navigate to Login screen and clear the onboarding history
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (context) => const LoginScreen(registrationSuccessful: true), // Show success message
+        builder: (context) => const LoginScreen(
+            registrationSuccessful: true), // Show success message
       ),
       (Route<dynamic> route) => false, // Remove all previous routes
     );
@@ -107,13 +119,21 @@ class EmploymentStatusScreen extends StatelessWidget {
         ),
         child: ListTile(
           onTap: onTap,
-          contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           title: Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: _primaryColor),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: _primaryColor),
           ),
-          subtitle: subtitle.isNotEmpty ? Text(subtitle, style: TextStyle(color: Colors.grey[600], fontSize: 15)) : null,
-          trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18, color: _primaryColor.withOpacity(0.7)),
+          subtitle: subtitle.isNotEmpty
+              ? Text(subtitle,
+                  style: TextStyle(color: Colors.grey[600], fontSize: 15))
+              : null,
+          trailing: Icon(Icons.arrow_forward_ios_rounded,
+              size: 18, color: _primaryColor.withOpacityCompat(0.7)),
         ),
       ),
     );

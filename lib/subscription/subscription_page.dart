@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'payment_page.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 // A simple data model for our subscription plans
 class SubscriptionPlan {
@@ -65,8 +66,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
   // --- CHANGED: Added a color list to match each plan ---
   final List<Color> planColors = [
-    Colors.indigo,    // Color for Basic (₹299)
-    Colors.teal,      // Color for Standard (₹399)
+    Colors.indigo, // Color for Basic (₹299)
+    Colors.teal, // Color for Standard (₹399)
     Colors.deepPurple, // Color for Premium (₹499)
   ];
 
@@ -99,7 +100,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   return PlanCard(
                     plan: plan,
                     isSelected: isSelected,
-                    planColor: planColors[index], // --- CHANGED: Pass the plan's color
+                    planColor:
+                        planColors[index], // --- CHANGED: Pass the plan's color
                     onTap: () {
                       setState(() {
                         _selectedIndex = index;
@@ -165,10 +167,12 @@ class PlanCard extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     // --- CHANGED: All colors are now derived from planColor or theme defaults ---
-    final Color cardColor =
-        isSelected ? planColor.withOpacity(0.12) : colorScheme.surfaceContainerHighest;
+    final Color cardColor = isSelected
+        ? planColor.withOpacityCompat(0.12)
+        : colorScheme.surfaceContainerHighest;
     final Color borderColor = isSelected ? planColor : colorScheme.outline;
-    final Color titleColor = isSelected ? planColor : colorScheme.onSurfaceVariant;
+    final Color titleColor =
+        isSelected ? planColor : colorScheme.onSurfaceVariant;
 
     return Card(
       elevation: 0,
@@ -198,7 +202,6 @@ class PlanCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12.0),
-
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
@@ -219,7 +222,6 @@ class PlanCard extends StatelessWidget {
                 ],
               ),
               const Divider(height: 24.0),
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: plan.perks
@@ -255,7 +257,8 @@ class PerkItem extends StatelessWidget {
   Widget build(BuildContext context) {
     // --- CHANGED: Icon color depends on selection, text color is constant ---
     final colorScheme = Theme.of(context).colorScheme;
-    final Color iconColor = isSelected ? perkColor : colorScheme.onSurfaceVariant;
+    final Color iconColor =
+        isSelected ? perkColor : colorScheme.onSurfaceVariant;
     final Color textColor = colorScheme.onSurface;
 
     return Padding(

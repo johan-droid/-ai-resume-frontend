@@ -1,12 +1,14 @@
 // lib/templates/resume_builder_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
 import 'package:rezume_app/models/resume_template_model.dart';
 // For font loading
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 // --- NEW: Dummy Data from modern-driver-resume.pdf ---
 // This map will serve as the base for the generated PDF
@@ -190,7 +192,9 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
         ));
         _isConversationComplete = true;
       });
-      print('Final Job Profile Details: $_resumeDetails');
+      if (kDebugMode) {
+        debugPrint('Final Job Profile Details: $_resumeDetails');
+      }
     }
   }
 
@@ -241,7 +245,9 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
         fontFallback: [hindiTtf, odiaTtf],
       );
     } catch (e) {
-      print('Custom fonts not found. Using default fonts. Error: $e');
+      if (kDebugMode) {
+        debugPrint('Custom fonts not found. Using default fonts. Error: $e');
+      }
       myTheme = pw.ThemeData.base();
     }
 
@@ -485,7 +491,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withOpacityCompat(0.2),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, -2),
@@ -535,7 +541,7 @@ class _ResumeBuilderScreenState extends State<ResumeBuilderScreen> {
               ? []
               : [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.15),
+                    color: Colors.grey.withOpacityCompat(0.15),
                     spreadRadius: 1,
                     blurRadius: 3,
                     offset: const Offset(0, 1),

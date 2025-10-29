@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rezume_app/app/localization/app_localizations.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class HomeScreen extends StatefulWidget {
   final String role; // 'User' or 'Organization'
@@ -56,12 +57,14 @@ class _HomeScreenState extends State<HomeScreen> {
           case 2:
             return {
               'title': 'चरण 2: AI से विवरण भरें',
-              'subtitle': 'विवरण लिखने में सहायता के लिए हमारे AI सहायक का उपयोग करें।',
+              'subtitle':
+                  'विवरण लिखने में सहायता के लिए हमारे AI सहायक का उपयोग करें।',
             };
           case 3:
             return {
               'title': 'चरण 3: अपना रिज्यूमे डाउनलोड करें',
-              'subtitle': 'अपना पूरा किया गया रिज्यूमे एक PDF के रूप में डाउनलोड करें।',
+              'subtitle':
+                  'अपना पूरा किया गया रिज्यूमे एक PDF के रूप में डाउनलोड करें।',
             };
           default:
             return {'title': '', 'subtitle': ''};
@@ -71,17 +74,20 @@ class _HomeScreenState extends State<HomeScreen> {
           case 1:
             return {
               'title': 'ପଦକ୍ଷେପ 1: ଏକ ଟେମ୍ପଲେଟ୍ ବାଛନ୍ତୁ',
-              'subtitle': 'ଏକ ପେସାଦାର ଟେମ୍ପଲେଟ୍ ବାଛନ୍ତୁ ଯାହା ଆପଣଙ୍କ ଶୈଳୀ ସହିତ ମେଳ ଖାଏ।',
+              'subtitle':
+                  'ଏକ ପେସାଦାର ଟେମ୍ପଲେଟ୍ ବାଛନ୍ତୁ ଯାହା ଆପଣଙ୍କ ଶୈଳୀ ସହିତ ମେଳ ଖାଏ।',
             };
           case 2:
             return {
               'title': 'ପଦକ୍ଷେପ 2: AI ସହିତ ବିବରଣୀ ଭରନ୍ତୁ',
-              'subtitle': 'ବିବରଣୀ ଲେଖିବାରେ ସାହାଯ୍ୟ ପାଇଁ ଆମର AI ସହାୟକ ବ୍ୟବହାର କରନ୍ତୁ।',
+              'subtitle':
+                  'ବିବରଣୀ ଲେଖିବାରେ ସାହାଯ୍ୟ ପାଇଁ ଆମର AI ସହାୟକ ବ୍ୟବହାର କରନ୍ତୁ।',
             };
           case 3:
             return {
               'title': 'ପଦକ୍ଷେପ 3: ଆପଣଙ୍କର ରିଜ୍ୟୁମ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ',
-              'subtitle': 'ଆପଣଙ୍କର ସମ୍ପୂର୍ଣ୍ଣ ରିଜ୍ୟୁମ୍ PDF ଭାବରେ ଡାଉନଲୋଡ୍ କରନ୍ତୁ।',
+              'subtitle':
+                  'ଆପଣଙ୍କର ସମ୍ପୂର୍ଣ୍ଣ ରିଜ୍ୟୁମ୍ PDF ଭାବରେ ଡାଉନଲୋଡ୍ କରନ୍ତୁ।',
             };
           default:
             return {'title': '', 'subtitle': ''};
@@ -117,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: _currentBackgroundColor,
-      
+
       // --- MODIFICATION: The AppBar has been removed ---
       // appBar: AppBar(
       //   title: Text(widget.role == 'User'
@@ -141,7 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 // --- Header Text ---
                 Text(
                   widget.role == 'User'
-                      ? (loc?.translate('How to Get Started') ?? 'How to Get Started')
+                      ? (loc?.translate('How to Get Started') ??
+                          'How to Get Started')
                       : 'Find Top Talent',
                   style: const TextStyle(
                     fontSize: 26,
@@ -150,11 +157,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-  
+
                 // 1. Language Toggle Buttons
                 _buildLanguageToggleButtons(),
                 const SizedBox(height: 16),
-  
+
                 // 2. Video Player Section
                 Stack(
                   children: [
@@ -168,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Center(
                         child: Icon(
                           Icons.play_circle_fill_rounded,
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withOpacityCompat(0.8),
                           size: 60,
                         ),
                       ),
@@ -176,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
-  
+
                 // 3. Dynamic Tutorial Text
                 Center(
                   child: Text(
@@ -189,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-  
+
                 // 4. Conditional Features/Suggestions Section
                 if (widget.role == 'User') ...[
                   // --- User Features ---
@@ -269,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: OutlinedButton.styleFrom(
                     foregroundColor: _currentPrimaryColor,
                     side: BorderSide(
-                        color: _currentPrimaryColor.withOpacity(0.5)),
+                        color: _currentPrimaryColor.withOpacityCompat(0.5)),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
                     padding:
@@ -331,8 +338,8 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 17, color: color),
           ),
-          subtitle:
-              Text(cardSubtitle, style: TextStyle(color: color.withOpacity(0.7))),
+          subtitle: Text(cardSubtitle,
+              style: TextStyle(color: color.withOpacityCompat(0.7))),
           trailing:
               Icon(Icons.arrow_forward_ios_rounded, size: 16, color: color),
         ),

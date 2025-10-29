@@ -1,8 +1,10 @@
 // lib/screens/onboarding/experience_level_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode, debugPrint;
 // Import the next screen in the flow
 import 'package:rezume_app/screens/onboarding/employment_status_screen.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 
 class ExperienceLevelScreen extends StatelessWidget {
   // Pass data from registration if needed later, e.g., user details map
@@ -22,7 +24,8 @@ class ExperienceLevelScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Experience'),
         backgroundColor: _primaryColor,
-        automaticallyImplyLeading: false, // No back button needed in onboarding flow
+        automaticallyImplyLeading:
+            false, // No back button needed in onboarding flow
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -33,7 +36,10 @@ class ExperienceLevelScreen extends StatelessWidget {
             Text(
               'Have you used a resume builder before?',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87),
             ),
             SizedBox(height: 12),
             Text(
@@ -70,7 +76,9 @@ class ExperienceLevelScreen extends StatelessWidget {
 
   // --- Navigation Logic ---
   void _navigateToNext(BuildContext context, String selectedExperience) {
-    print("Selected Experience: $selectedExperience");
+    if (kDebugMode) {
+      debugPrint("Selected Experience: $selectedExperience");
+    }
     // Navigate to the Employment Status screen
     Navigator.push(
       context,
@@ -102,13 +110,19 @@ class ExperienceLevelScreen extends StatelessWidget {
         ),
         child: ListTile(
           onTap: onTap,
-          contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           title: Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: _primaryColor),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: _primaryColor),
           ),
-          subtitle: Text(subtitle, style: TextStyle(color: Colors.grey[600], fontSize: 15)),
-          trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18, color: _primaryColor.withOpacity(0.7)),
+          subtitle: Text(subtitle,
+              style: TextStyle(color: Colors.grey[600], fontSize: 15)),
+          trailing: Icon(Icons.arrow_forward_ios_rounded,
+              size: 18, color: _primaryColor.withOpacityCompat(0.7)),
         ),
       ),
     );

@@ -13,7 +13,8 @@ class LanguageSelectionScreen extends StatefulWidget {
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   // State variables for dropdown
-  String? _selectedOtherLanguage; // Holds the selection from dropdown (null initially)
+  String?
+      _selectedOtherLanguage; // Holds the selection from dropdown (null initially)
 
   // Define the languages for the dropdown
   final List<Map<String, String>> _otherLanguages = [
@@ -125,25 +126,20 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               // --- English Button ---
               _buildLanguageButton(
                 text: 'English',
-                onTap: () {
-                  Provider.of<LanguageProvider>(context, listen: false).changeLanguage(Locale('en'));
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  );
-                },
+                onTap: () => _selectLanguage(context, 'en'),
               ),
               const SizedBox(height: 16), // Space between button and dropdown
 
               // --- Dropdown for Other Languages ---
               DropdownButtonFormField<String>(
-                value: _selectedOtherLanguage,
+                initialValue: _selectedOtherLanguage,
                 isExpanded: true, // Make dropdown take full width
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.blue[50], // Match button background
                   hintText: 'Choose other Indian languages',
-                  prefixIcon: const Icon(Icons.language, color: Color(0xFF0056b3)), // Add an icon
+                  prefixIcon: const Icon(Icons.language,
+                      color: Color(0xFF0056b3)), // Add an icon
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none, // Clean look
@@ -160,12 +156,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                     setState(() {
                       _selectedOtherLanguage = newValue;
                     });
-                    // Update provider and navigate
-                    Provider.of<LanguageProvider>(context, listen: false).changeLanguage(Locale(newValue));
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginScreen()),
-                    );
+                    // Use helper to update provider and navigate
+                    _selectLanguage(context, newValue);
                   }
                 },
               ),

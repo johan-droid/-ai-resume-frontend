@@ -1,6 +1,7 @@
 // lib/profile/profile_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:rezume_app/utils/color_extensions.dart';
 import 'package:rezume_app/screens/auth/login_screen.dart';
 import 'package:rezume_app/profile/help_center_screen.dart';
 import 'package:rezume_app/profile/edit_profile_screen.dart';
@@ -77,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundColor: _currentPrimaryColor.withOpacity(0.1),
+                  backgroundColor: _currentPrimaryColor.withOpacityCompat(0.1),
                   child: Text(
                     _profileAvatarText,
                     style: TextStyle(
@@ -245,7 +246,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     bool isLogout = false,
   }) {
     final Color bgColor =
-        isLogout ? Colors.red.shade50 : color.withOpacity(0.1);
+        isLogout ? Colors.red.shade50 : color.withOpacityCompat(0.1);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
