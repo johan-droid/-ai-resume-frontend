@@ -44,11 +44,47 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           IconButton(
             icon: const Icon(Icons.check_rounded),
             tooltip: 'Save',
-            onPressed: () {
-              // TODO: Add logic to save the new data
+            onPressed: () async {
+              // Validate and save the data
+              if (_nameController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please enter your name')),
+                );
+                return;
+              }
 
-              // For now, just go back to the profile screen
-              Navigator.of(context).pop();
+              // Show a loading indicator
+              final scaffoldMessenger = ScaffoldMessenger.of(context);
+              final navigator = Navigator.of(context);
+
+              try {
+                // TODO: Replace with actual API call to save the profile
+                // For now, we'll just simulate a network delay
+                await Future.delayed(const Duration(milliseconds: 500));
+
+                // Show success message
+                scaffoldMessenger.showSnackBar(
+                  const SnackBar(
+                    content: Text('Profile updated successfully!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+
+                // Navigate back with the updated data
+                navigator.pop({
+                  'name': _nameController.text.trim(),
+                  'phone': _phoneController.text.trim(),
+                  'job': _jobController.text.trim(),
+                });
+              } catch (e) {
+                // Show error message
+                scaffoldMessenger.showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to update profile: ${e.toString()}'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
             },
           )
         ],

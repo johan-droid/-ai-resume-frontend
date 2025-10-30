@@ -81,7 +81,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundColor: _currentPrimaryColor.withOpacityCompat(0.1),
+                    backgroundColor:
+                        _currentPrimaryColor.withOpacityCompat(0.1),
                     child: Text(
                       _profileAvatarText,
                       style: TextStyle(
@@ -91,9 +92,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text(_profileName, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text(_profileName,
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4),
-                  Text(_profileContact, style: TextStyle(fontSize: 16, color: Colors.grey[700])),
+                  Text(_profileContact,
+                      style: TextStyle(fontSize: 16, color: Colors.grey[700])),
                 ],
               ),
             ),
@@ -192,7 +196,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PostedJobsScreen(themeColor: _currentPrimaryColor),
+                            builder: (context) => PostedJobsScreen(
+                                themeColor: _currentPrimaryColor),
                           ),
                         );
                       },
@@ -208,7 +213,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const HelpCenterScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const HelpCenterScreen()),
                       );
                     },
                     color: _currentPrimaryColor,
@@ -221,7 +227,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: 'Logout',
                     onTap: () {
                       Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
                         (Route<dynamic> route) => false,
                       );
                     },
@@ -269,7 +276,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         subtitle: subtitle != null
             ? Text(
                 subtitle,
-                style: TextStyle(color: color.withOpacity(0.7), fontSize: 14),
+                style: TextStyle(
+                    color: color.withAlpha((0.7 * 255).round()), fontSize: 14),
               )
             : null,
         trailing: Icon(
@@ -280,8 +288,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
-  
 
   // --- ADD THIS DIALOG FUNCTION ---
   void _showActivePlanDialog(BuildContext context, String planName) {
@@ -302,12 +308,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Text(
                 planName,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: _currentPrimaryColor),
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: _currentPrimaryColor),
               ),
               const SizedBox(height: 15),
               const Text('This is your current subscription.'),
               const SizedBox(height: 8),
-              Text('Renews on: Nov 30, 2025 (Dummy)', style: TextStyle(color: Colors.grey[600])),
+              Text('Renews on: Nov 30, 2025 (Dummy)',
+                  style: TextStyle(color: Colors.grey[600])),
             ],
           ),
           actions: <Widget>[
@@ -315,7 +325,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: const Text('Go to Subscription Page'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SubscriptionPage()));
               },
             ),
             TextButton(
